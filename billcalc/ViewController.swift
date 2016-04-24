@@ -82,7 +82,7 @@ class ViewController: UIViewController {
     var rate:Double = 0.00 //买断
     var money:Double = 0.00
     
-    var maxGuid = g_rates.count
+    //var maxGuid = g_rates.count
     //var dbRate:Rate = Rate() //存入库数据的数据
     
     var fontMedium = UIFont.systemFontOfSize(24.0, weight: 0.3)
@@ -482,8 +482,7 @@ class ViewController: UIViewController {
                 labMain.text = String(format:"%.4f", rate)
                 
                 let dbRate = Rate()
-                dbRate.guid = maxGuid
-                maxGuid += 1 // warning
+                dbRate.guid = g_rates.count
                 dbRate.date = today.timeIntervalSince1970
                 dbRate.endDate = endDate.timeIntervalSince1970
                 dbRate.monthRate = monthRate
@@ -500,9 +499,8 @@ class ViewController: UIViewController {
             let result = String(format: "%.2f", money - cutMoney)
             labMain.text = sMoneyHandle.formatMoney(result, set: true)
             //update
-            var dbRate = Rate.GetRateByGuid(maxGuid - 1)
-            if(dbRate == nil
-                || (dbRate?.money as! Double > 0.0 && dbRate?.money as! Double != money))
+            var dbRate = g_rates.last
+            if(dbRate!.money as! Double > 0.0 && dbRate!.money as! Double != money)
             {
                 //金额不同则新建一个记录
                 dbRate = Rate()

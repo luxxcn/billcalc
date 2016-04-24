@@ -46,17 +46,19 @@ class HistoryViewController: UIViewController,UITableViewDelegate,UITableViewDat
         cell.labBank.text = rate.bank as? String
         cell.labEndDate.text = endDate.format("MM月dd日")
         cell.labRate.text = String(format:"%.2f", g_rates[indexPath.row].rate as! Double)
-        cell.data = rate.guid as! Int
+        NSLog("data guid: %d", rate.guid as! Int)
         return cell
     }
     
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RateTableViewCell
-        if(editingStyle == UITableViewCellEditingStyle.Delete) {
-            // assert data > 0 and data < g_rates.count
-            let rate = g_rates[cell.data]
+        if(editingStyle == .Delete) {
+            let rate = g_rates[indexPath.row]
             rate.deleteFromDB()
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
 }

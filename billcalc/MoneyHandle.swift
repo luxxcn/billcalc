@@ -51,6 +51,7 @@ class MoneyHandle: NSObject {
         unit = "千万"
         }
         */
+        NSLog("money:%f", money)
         return result == 0 ? "" : String(format: "%@万", formatMoney(String(result), set:true))
     }
 }

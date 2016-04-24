@@ -33,23 +33,24 @@ var g_rates:[Rate] = Rate.LoadAllData()
     }
     
     func deleteFromDB() {
-        sDatabase.context().deleteObject(self)
-        sDatabase.save()
         for i in 0...g_rates.count - 1
         {
-            if(g_rates[i].guid == self.guid)
+            if(g_rates[i].objectID == self.objectID)
             {
                 g_rates.removeAtIndex(i)
                 break
             }
         }
+        
+        sDatabase.context().deleteObject(self)
+        sDatabase.save()
     }
     
-    class func GetRateByGuid(guid:Int)->Rate? {
-        let predicate = String(format: "guid = %d", guid)
-        let results = sDatabase.loadDataForEntity("Rate", predicate: predicate)
-        return results.count > 0 ? results[0] as? Rate : nil
-    }
+//    class func GetRateByGuid(guid:Int)->Rate? {
+//        let predicate = String(format: "guid = %d", guid)
+//        let results = sDatabase.loadDataForEntity("Rate", predicate: predicate)
+//        return results.count > 0 ? results[0] as? Rate : nil
+//    }
     
     // 读取所有数据
     class func LoadAllData()->[Rate] {
