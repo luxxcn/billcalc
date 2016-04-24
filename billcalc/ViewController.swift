@@ -520,20 +520,6 @@ class ViewController: UIViewController {
         case .End:
             labDetail.text = ""
             labMain.text = details[0]
-            
-            /*let calcRate:Rate = Rate()
-            if(rate > 0)
-            {
-                calcRate.adddays = NSNumber(long: adddays)
-                calcRate.date = today.timeIntervalSince1970
-                calcRate.endDate = endDate.timeIntervalSince1970
-                calcRate.money = money
-                calcRate.monthRate = monthRate
-                calcRate.rate = rate
-
-                //calcRate.saveToDB()
-            }
-            */
         default:
             break
         }
