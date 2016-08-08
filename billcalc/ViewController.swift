@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreData
+//import CoreData
 
 let D_DAY:Int = 24 * 3600
 let WEEK_CN:[String] = ["一", "二", "三", "四", "五", "六", "日"]
@@ -82,6 +82,8 @@ class ViewController: UIViewController {
     var rate:Double = 0.00 //买断
     var money:Double = 0.00
     
+    var beganAdddays:Int = 0
+    
     //var maxGuid = g_rates.count
     //var dbRate:Rate = Rate() //存入库数据的数据
     
@@ -102,7 +104,8 @@ class ViewController: UIViewController {
             btn.setBackgroundImage(imageWithColor(UIColor.grayColor()), forState: UIControlState.Highlighted)
         }
         
-        NSLog("数据库Rate:%d条", g_rates.count)
+        let panGesture = UIPanGestureRecognizer(target: self, action:#selector(ViewController.handlePanGesture(_:)))
+        self.view.addGestureRecognizer(panGesture)
     }
 
     override func didReceiveMemoryWarning() {
@@ -123,40 +126,6 @@ class ViewController: UIViewController {
         UIGraphicsEndImageContext()
         return image
     }
-    
-    // set, true格式化，false还原
-    /*func formatMoney(money:String, set:Bool)->String {
-        var content = money
-        let number = numberFmt.numberFromString(money)
-        if(set)
-        {
-            content = numberFmt.stringFromNumber(number!)!
-        }
-        else
-        {
-            content = (number?.stringValue)!
-        }
-        return content
-    }
-
-    
-    func wanYuan(money:Double)->String{
-        let result = money / 10000.00
-        /*var unit = "万"
-        if(result >= 10000)
-        {
-            result /= 10000.00
-            unit = "亿"
-        }
-        else if(result >= 1000)
-        {
-            result /= 1000.00
-            unit = "千万"
-        }
-        */
-        return String(format: "%@万", formatMoney(String(result), set:true))
-    }
-*/
     
     @IBAction func rateSelect(sender: UIButton) {
         if(rateType == sender.tag)
@@ -207,8 +176,7 @@ class ViewController: UIViewController {
         switch(status)
         {
         case .End:
-            labDetail.text = ""
-            labMain.text = ""
+            doReset(sender)
             status = .NeedDate
             //labDetail.font = UIFont.systemFontOfSize(24.0)
         case .NeedDate:
@@ -277,9 +245,15 @@ class ViewController: UIViewController {
     }
 
     @IBAction func doReset(sender: UIButton) {
-        labMain.text = details[0]
+        if(status != .End) {
+            labMain.text = details[0]
+        } else {
+            labMain.text = ""
+        }
         labDetail.text = ""
+        endDate = NSDate()
         rate = 0.0
+        money = 0.0
         adddays = 3
         status = .End
     }
@@ -319,7 +293,7 @@ class ViewController: UIViewController {
         labMain.text = content as String
     }
     
-    // 反悔：1,日期转化错误  2,2月最后一日不正确
+    // 返回：1,日期转化错误  2,2月最后一日不正确
     func isInvalidDate(year:Int, month:Int, day:Int)->Int {
         var errorDate = 0;
         var maxMonthDay = 30
@@ -359,6 +333,7 @@ class ViewController: UIViewController {
         let content:NSString = labMain.text!;
         if(content.length < 2)
         {
+            labDetail.text = "输入到期日,如：0303表示3月3日"
             return false
         }
         
@@ -387,8 +362,8 @@ class ViewController: UIViewController {
             endDay = content.substringWithRange(NSRange(location: 2, length: 2))
         }
         
-        //如果到期日比当前日小，则年份加1年
-        if(Int(endMonth) < Int(month) || (Int(endMonth) == Int(month) && Int(endDay) < Int(day)))
+        //如果到期日小于等于当前日，则年份加1年
+        if(Int(endMonth) < Int(month) || (Int(endMonth) == Int(month) && Int(endDay) <= Int(day)))
         {
             year = String(Int(year)! + 1)
         }
@@ -412,11 +387,7 @@ class ViewController: UIViewController {
         endDate = dateFmt.dateFromString(year + "-" + endMonth + "-" + endDay)!
         
         dates = dateFmt.stringFromDate(endDate).componentsSeparatedByString("-")
-        endMonth = dates[1]
-        endDay = dates[2]
         
-        let days = endDate.daysSinceToday()
-        //labMain.text = String(days)
         let weekDay = endDate.dayOfWeek()
         adddays = 3
         if(weekDay == 5)
@@ -427,9 +398,43 @@ class ViewController: UIViewController {
         {
             adddays += 1;
         }
-        labDetail.text =
-            endMonth + "月" + endDay + "日 周"+WEEK_CN[weekDay] + "," + String(days) + "+" + String(adddays) + "天"
         return true;
+    }
+    
+    func refreshScreen() {
+        let days = endDate.daysSinceToday()
+        if(days > 0) {
+            let dates = dateFmt.stringFromDate(endDate).componentsSeparatedByString("-")
+            let endMonth = dates[1]
+            let endDay = dates[2]
+            let weekDay = endDate.dayOfWeek()
+            labDetail.text =
+                endMonth + "月" + endDay + "日 周"+WEEK_CN[weekDay] + "," + String(days) + "+" + String(adddays) + "天"
+        }
+        if(rate > 0) {
+            if(rateType != 2)
+            {
+                rate = monthRate / 30.0 * Double(days + adddays)
+            }
+            
+            labDetail.text!
+                += String(format: "\r\n月%.2f‰, 年%.2f%%", monthRate * 10.0, monthRate * 12.0)
+            if(needMoney)
+            {
+                labMain.text = details[2]
+                labDetail.text! += String(format: ", 扣%.3f%%",rate)
+            }
+            else
+            {
+                labMain.text = String(format:"%.4f", rate)
+            }
+        }
+        if(money > 0) {
+            let cutMoney = money * rate / 100
+            labDetail.text! += String(format: "\r\n金额:%@, 扣息:%.2f", sMoneyHandle.wanYuan(money), cutMoney)
+            let result = String(format: "%.2f", money - cutMoney)
+            labMain.text = sMoneyHandle.formatMoney(result, set: true)
+        }
     }
     
     @IBAction func doOK(sender: UIButton) {
@@ -446,11 +451,12 @@ class ViewController: UIViewController {
         case .NeedDate://输入日期，或到期天数，或金额，3位数判断为天数，4位数判断为日期，5位数以上判断为金额
             if(calcDays())
             {
+                refreshScreen()
                 status = .NeedRate
                 labMain.text = details[1]
             }
         case .NeedRate:
-            rate = Double(labMain.text!)!
+            rate = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!//有逗号会出错
             let days = endDate.daysSinceToday()
             if(rateType == 0)
             {
@@ -469,50 +475,19 @@ class ViewController: UIViewController {
                 rate = monthRate / 30.0 * Double(days + adddays)
             }
             
-            labDetail.text!
-                += String(format: "\r\n月%.2f‰, 年%.2f%%", monthRate * 10.0, monthRate * 12.0)
+            refreshScreen()
             if(needMoney)
             {
                 labMain.text = details[2]
-                labDetail.text! += String(format: ", 扣%.3f%%",rate)
                 status = .NeedMoney
             }
             else
             {
-                labMain.text = String(format:"%.4f", rate)
-                
-                let dbRate = Rate()
-                dbRate.guid = g_rates.count
-                dbRate.date = today.timeIntervalSince1970
-                dbRate.endDate = endDate.timeIntervalSince1970
-                dbRate.monthRate = monthRate
-                dbRate.adddays = adddays
-                dbRate.rate = rate
-                dbRate.saveToDB();
-                g_rates.append(dbRate)
                 status = .End
             }
         case .NeedMoney:
             money = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!
-            let cutMoney = money * rate / 100
-            labDetail.text! += String(format: "\r\n金额:%@, 扣息:%.2f", sMoneyHandle.wanYuan(money), cutMoney)
-            let result = String(format: "%.2f", money - cutMoney)
-            labMain.text = sMoneyHandle.formatMoney(result, set: true)
-            //update
-            var dbRate = g_rates.last
-            if(dbRate!.money as! Double > 0.0 && dbRate!.money as! Double != money)
-            {
-                //金额不同则新建一个记录
-                dbRate = Rate()
-                g_rates.append(dbRate!)
-            }
-            dbRate!.money = money
-            dbRate!.date = today.timeIntervalSince1970
-            dbRate!.endDate = endDate.timeIntervalSince1970
-            dbRate!.monthRate = monthRate
-            dbRate!.adddays = adddays
-            dbRate!.rate = rate
-            dbRate!.saveToDB();
+            refreshScreen()
             
             status = .End
         case .End:
@@ -520,6 +495,21 @@ class ViewController: UIViewController {
             labMain.text = details[0]
         default:
             break
+        }
+    }
+    
+    func handlePanGesture(sender:UIPanGestureRecognizer) {
+        let translation = sender.translationInView(self.view)
+        if(sender.state == .Began) {
+            beganAdddays = adddays
+        }
+        if(sender.state == .Changed){
+            if(endDate.daysSinceToday() > 0) {
+                let changeAddDays = Int(translation.x / 10.0)
+                adddays = beganAdddays + changeAddDays
+                adddays = adddays < 0 ? 0 : adddays
+                refreshScreen()
+            }
         }
     }
     
