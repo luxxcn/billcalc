@@ -9,33 +9,6 @@
 import UIKit
 //import CoreData
 
-let D_DAY:Int = 24 * 3600
-let WEEK_CN:[String] = ["一", "二", "三", "四", "五", "六", "日"]
-
-extension NSDate {
-    func dayOfWeek()->Int{
-        let interval = self.timeIntervalSince1970;
-        let days = Int(interval) / D_DAY;
-        return Int((days - 3) % 7);
-    }
-    
-    func daysSinceToday()->Int{
-        var today = NSDate()
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let todayStr = formatter.stringFromDate(today)
-        today = formatter.dateFromString(todayStr)! //抹掉时间，只保留日期，便于准确到期天数
-        //self = formatter.dateFromString(formatter.stringFromDate(self))
-        
-        return Int(self.timeIntervalSinceDate(today)) / D_DAY
-    }
-    
-    func format(format:String)->String{
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = format
-        return formatter.stringFromDate(self)
-    }
-}
 
 extension NSString {
     func isPureInt()->Bool{
@@ -158,15 +131,11 @@ class ViewController: UIViewController {
         sender.titleLabel?.font = needMoney ? fontMedium : fontLight
         if(needMoney && rate > 0 && status == .End && labDetail.text != "")
         {
-            var dates:[String] = dateFmt.stringFromDate(endDate).componentsSeparatedByString("-")
-            
-            let days = endDate.daysSinceToday()
-            let weekDay = endDate.dayOfWeek()
-            
-            labDetail.text! = String(format: "%@月%@日 周%@,%d+%d天\r\n月%.2f‰, 年%.2f%%, 扣%.3f%%", dates[1], dates[2], WEEK_CN[weekDay], days, adddays, monthRate * 10.0, monthRate * 12.0, rate)
-            
-            labMain.text = details[2]
+            refreshScreen()
             status = .NeedMoney
+        }
+        if(!needMoney && status == .NeedMoney) {
+            status = .End
         }
     }
 
@@ -410,16 +379,14 @@ class ViewController: UIViewController {
     func refreshScreen() {
         let days = endDate.daysSinceToday()
         if(days > 0) {
-            let dates = dateFmt.stringFromDate(endDate).componentsSeparatedByString("-")
-            let endMonth = dates[1]
-            let endDay = dates[2]
             let weekDay = endDate.dayOfWeek()
-            labDetail.text =
-                endMonth + "月" + endDay + "日 周"+WEEK_CN[weekDay] + "," + String(days) + "+" + String(adddays) + "天"
+            labDetail.text = dateFmt.stringFromDate(endDate) + " 周"+WEEK_CN[weekDay] + "," + String(days) + "+" + String(adddays) + "天"
         }
         if(rate > 0) {
-            if(rateType != 2)
+            if(rateType == 2) //直接设置买断扣息
             {
+                monthRate = rate / Double(days + adddays) * 30.0
+            } else {
                 rate = monthRate / 30.0 * Double(days + adddays)
             }
             
@@ -493,8 +460,9 @@ class ViewController: UIViewController {
             }
         case .NeedMoney:
             money = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!
-            refreshScreen()
-            
+            if(money > 0) {
+                refreshScreen()
+            }
             status = .End
         case .End:
             labDetail.text = ""
