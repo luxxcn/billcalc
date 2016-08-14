@@ -105,6 +105,12 @@ class ViewController: UIViewController {
         }
         
         let panGesture = UIPanGestureRecognizer(target: self, action:#selector(ViewController.handlePanGesture(_:)))
+        
+        //todo: 只设置显示区可以出发滑动，因为会影响点击按钮效果。
+        //labMain.gestureRecognizers = nil
+        //labMain.addGestureRecognizer(panGesture)
+        //labDetail.addGestureRecognizer(panGesture)
+        //labMain.userInteractionEnabled = true
         self.view.addGestureRecognizer(panGesture)
     }
 
