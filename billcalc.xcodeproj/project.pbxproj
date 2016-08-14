@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3301D3DB1D4E3F0100E74562 /* DateTimeHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3301D3DA1D4E3F0100E74562 /* DateTimeHandle.swift */; };
 		3313F5081CA80327008705FD /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F5071CA80327008705FD /* HistoryViewController.swift */; };
 		3313F50A1CAAC005008705FD /* RateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F5091CAAC005008705FD /* RateTableViewCell.swift */; };
 		3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F50B1CAAC623008705FD /* MoneyHandle.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3301D3DA1D4E3F0100E74562 /* DateTimeHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimeHandle.swift; sourceTree = "<group>"; };
 		3313F5071CA80327008705FD /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		3313F5091CAAC005008705FD /* RateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateTableViewCell.swift; sourceTree = "<group>"; };
 		3313F50B1CAAC623008705FD /* MoneyHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoneyHandle.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				33B276E31C91CD650018EB8C /* AppDelegate.swift */,
 				33B276E51C91CD650018EB8C /* ViewController.swift */,
 				3313F50B1CAAC623008705FD /* MoneyHandle.swift */,
+				3301D3DA1D4E3F0100E74562 /* DateTimeHandle.swift */,
 				3313F5071CA80327008705FD /* HistoryViewController.swift */,
 				3313F5091CAAC005008705FD /* RateTableViewCell.swift */,
 				33B276E71C91CD650018EB8C /* Main.storyboard */,
@@ -319,6 +322,7 @@
 				3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */,
 				33B276E41C91CD650018EB8C /* AppDelegate.swift in Sources */,
 				33B276EC1C91CD650018EB8C /* billcalc.xcdatamodeld in Sources */,
+				3301D3DB1D4E3F0100E74562 /* DateTimeHandle.swift in Sources */,
 				3383C7911C9C322A0088657C /* Rate.swift in Sources */,
 				3313F5081CA80327008705FD /* HistoryViewController.swift in Sources */,
 				3383C7901C9C322A0088657C /* Rate+CoreDataProperties.swift in Sources */,
