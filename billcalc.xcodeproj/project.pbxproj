@@ -11,6 +11,11 @@
 		3313F5081CA80327008705FD /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F5071CA80327008705FD /* HistoryViewController.swift */; };
 		3313F50A1CAAC005008705FD /* RateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F5091CAAC005008705FD /* RateTableViewCell.swift */; };
 		3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F50B1CAAC623008705FD /* MoneyHandle.swift */; };
+		334A4FC21D67FE9C007A7306 /* guide1.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FBE1D67FE9C007A7306 /* guide1.png */; };
+		334A4FC31D67FE9C007A7306 /* guide2.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FBF1D67FE9C007A7306 /* guide2.png */; };
+		334A4FC41D67FE9C007A7306 /* guide3.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FC01D67FE9C007A7306 /* guide3.png */; };
+		334A4FC51D67FE9C007A7306 /* guide4.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FC11D67FE9C007A7306 /* guide4.png */; };
+		334A4FC71D680004007A7306 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334A4FC61D680004007A7306 /* GuideViewController.swift */; };
 		335DA9FE1C999189009D3B41 /* logo29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA9F91C999189009D3B41 /* logo29@2x.png */; };
 		335DA9FF1C999189009D3B41 /* icon29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA9FA1C999189009D3B41 /* icon29@3x.png */; };
 		335DAA001C999189009D3B41 /* logo40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA9FB1C999189009D3B41 /* logo40@2x.png */; };
@@ -51,6 +56,11 @@
 		3313F5071CA80327008705FD /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		3313F5091CAAC005008705FD /* RateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateTableViewCell.swift; sourceTree = "<group>"; };
 		3313F50B1CAAC623008705FD /* MoneyHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoneyHandle.swift; sourceTree = "<group>"; };
+		334A4FBE1D67FE9C007A7306 /* guide1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide1.png; path = images/guide1.png; sourceTree = "<group>"; };
+		334A4FBF1D67FE9C007A7306 /* guide2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide2.png; path = images/guide2.png; sourceTree = "<group>"; };
+		334A4FC01D67FE9C007A7306 /* guide3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide3.png; path = images/guide3.png; sourceTree = "<group>"; };
+		334A4FC11D67FE9C007A7306 /* guide4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide4.png; path = images/guide4.png; sourceTree = "<group>"; };
+		334A4FC61D680004007A7306 /* GuideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
 		335DA9F91C999189009D3B41 /* logo29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo29@2x.png"; path = "billcalc/images/logo29@2x.png"; sourceTree = "<group>"; };
 		335DA9FA1C999189009D3B41 /* icon29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon29@3x.png"; path = "billcalc/images/icon29@3x.png"; sourceTree = "<group>"; };
 		335DA9FB1C999189009D3B41 /* logo40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo40@2x.png"; path = "billcalc/images/logo40@2x.png"; sourceTree = "<group>"; };
@@ -100,6 +110,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		334A4FB51D67FDE4007A7306 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				334A4FBE1D67FE9C007A7306 /* guide1.png */,
+				334A4FBF1D67FE9C007A7306 /* guide2.png */,
+				334A4FC01D67FE9C007A7306 /* guide3.png */,
+				334A4FC11D67FE9C007A7306 /* guide4.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
 		335DA9F61C998E36009D3B41 /* images */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,8 +167,10 @@
 		33B276E21C91CD650018EB8C /* billcalc */ = {
 			isa = PBXGroup;
 			children = (
+				334A4FB51D67FDE4007A7306 /* images */,
 				3383C7921C9C324A0088657C /* coredata */,
 				33B276E31C91CD650018EB8C /* AppDelegate.swift */,
+				334A4FC61D680004007A7306 /* GuideViewController.swift */,
 				33B276E51C91CD650018EB8C /* ViewController.swift */,
 				3313F50B1CAAC623008705FD /* MoneyHandle.swift */,
 				3301D3DA1D4E3F0100E74562 /* DateTimeHandle.swift */,
@@ -288,10 +311,14 @@
 				33B276EE1C91CD650018EB8C /* Assets.xcassets in Resources */,
 				335DAA021C999189009D3B41 /* logo@3x.png in Resources */,
 				335DA9FE1C999189009D3B41 /* logo29@2x.png in Resources */,
+				334A4FC41D67FE9C007A7306 /* guide3.png in Resources */,
 				335DAA001C999189009D3B41 /* logo40@2x.png in Resources */,
+				334A4FC31D67FE9C007A7306 /* guide2.png in Resources */,
+				334A4FC21D67FE9C007A7306 /* guide1.png in Resources */,
 				335DAA011C999189009D3B41 /* logo@2x.png in Resources */,
 				335DA9FF1C999189009D3B41 /* icon29@3x.png in Resources */,
 				33B276E91C91CD650018EB8C /* Main.storyboard in Resources */,
+				334A4FC51D67FE9C007A7306 /* guide4.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +349,7 @@
 				3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */,
 				33B276E41C91CD650018EB8C /* AppDelegate.swift in Sources */,
 				33B276EC1C91CD650018EB8C /* billcalc.xcdatamodeld in Sources */,
+				334A4FC71D680004007A7306 /* GuideViewController.swift in Sources */,
 				3301D3DB1D4E3F0100E74562 /* DateTimeHandle.swift in Sources */,
 				3383C7911C9C322A0088657C /* Rate.swift in Sources */,
 				3313F5081CA80327008705FD /* HistoryViewController.swift in Sources */,

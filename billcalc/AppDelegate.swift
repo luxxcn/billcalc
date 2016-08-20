@@ -17,6 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // 第一次启动进入向导页
+        if(!(NSUserDefaults.standardUserDefaults().boolForKey("everLaunched"))) {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "everLaunched")
+            let guideViewController = GuideViewController()
+            self.window!.rootViewController = guideViewController
+            
+        }
+        
         return true
     }
 
