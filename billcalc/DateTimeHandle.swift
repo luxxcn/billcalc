@@ -8,6 +8,8 @@
 
 import UIKit
 
+let sDateTimeHandle = DateTimeHandle()
+
 let D_DAY:Int = 24 * 3600
 let WEEK_CN:[String] = ["一", "二", "三", "四", "五", "六", "日"]
 
@@ -34,8 +36,23 @@ extension NSDate {
         formatter.dateFormat = format
         return formatter.stringFromDate(self)
     }
+    
+    func components()->NSDateComponents {
+        let canlendar = NSCalendar.currentCalendar()
+        let flags:NSCalendarUnit = [.Year, .Month, .Day]
+        return canlendar.components(flags, fromDate: self)
+    }
+    
+    func isLeapYear()->Bool{
+        let comp = self.components()
+        if((comp.year % 4 == 0 && comp.year % 100 != 0) || comp.year % 400 == 0) {
+            return true;
+        }
+        return false;
+    }
+    
 }
 
 class DateTimeHandle: NSObject {
-
+    
 }
