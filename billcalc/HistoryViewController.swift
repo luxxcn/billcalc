@@ -26,39 +26,42 @@ class HistoryViewController: UIViewController,UITableViewDelegate,UITableViewDat
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    @IBAction func doClose(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func doClose(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return g_rates.count
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //return g_rates.count
+        return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("RateTableViewCell", forIndexPath: indexPath) as! RateTableViewCell
-        let rate = g_rates[indexPath.row]
-        let endDate = NSDate(timeIntervalSince1970: rate.endDate as! Double)
-        cell.labMoney.text = sMoneyHandle.wanYuan(rate.money as! Double)
-        cell.labBank.text = rate.bank as? String
-        cell.labEndDate.text = endDate.format("MM月dd日")
-        cell.labRate.text = String(format:"%.2f", g_rates[indexPath.row].rate as! Double)
-        NSLog("data guid: %d", rate.guid as! Int)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RateTableViewCell", for: indexPath) as! RateTableViewCell
+//        let rate = g_rates[(indexPath as NSIndexPath).row]
+//        let endDate = Date(timeIntervalSince1970: rate.endDate as! Double)
+//        cell.labMoney.text = sMoneyHandle.wanYuan(rate.money as! Double)
+//        cell.labBank.text = rate.bank as? String
+//        cell.labEndDate.text = endDate.format("MM月dd日")
+//        cell.labRate.text = String(format:"%.2f", g_rates[(indexPath as NSIndexPath).row].rate as! Double)
+//        NSLog("data guid: %d", rate.guid as! Int)
         return cell
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if(editingStyle == .Delete) {
-            let rate = g_rates[indexPath.row]
-            rate.deleteFromDB()
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if(editingStyle == .delete) {
+//            let rate = g_rates[(indexPath as NSIndexPath).row]
+//            rate.deleteFromDB()
+//            tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
+ 
 }

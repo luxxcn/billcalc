@@ -14,21 +14,21 @@ class MoneyHandle: NSObject {
     
     static let sMoneyHandle = MoneyHandle()
     
-    let numberFmt = NSNumberFormatter()
+    let numberFmt = NumberFormatter()
     
-    private override init() {
-        numberFmt.locale = NSLocale.currentLocale()
-        numberFmt.numberStyle = NSNumberFormatterStyle.DecimalStyle
-        numberFmt.roundingMode = NSNumberFormatterRoundingMode.RoundFloor
+    fileprivate override init() {
+        numberFmt.locale = Locale.current
+        numberFmt.numberStyle = NumberFormatter.Style.decimal
+        numberFmt.roundingMode = NumberFormatter.RoundingMode.floor
     }
     
     // set, true格式化，false还原
-    func formatMoney(money:String, set:Bool)->String {
+    func formatMoney(_ money:String, set:Bool)->String {
         var content = money
-        let number = numberFmt.numberFromString(money)
+        let number = numberFmt.number(from: money)
         if(set)
         {
-            content = numberFmt.stringFromNumber(number!)!
+            content = numberFmt.string(from: number!)!
         }
         else
         {
@@ -37,7 +37,7 @@ class MoneyHandle: NSObject {
         return content
     }
     
-    func wanYuan(money:Double)->String{
+    func wanYuan(_ money:Double)->String{
         let result = money / 10000.00
         /*var unit = "万"
         if(result >= 10000)

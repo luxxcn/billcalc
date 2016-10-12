@@ -18,7 +18,7 @@ class Database: NSObject {
     
     // 使用 apDelegate
     func context()->NSManagedObjectContext{
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+        return (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     }
     
     func save() {
@@ -29,7 +29,7 @@ class Database: NSObject {
         }
     }
     
-    func loadDataForEntity(entity:String, predicate:String)->[AnyObject]{
+    /*func loadDataForEntity(_ entity:String, predicate:String)->[AnyObject]{
         var result = [AnyObject]()
     
         let request = NSFetchRequest(entityName: entity)
@@ -37,11 +37,12 @@ class Database: NSObject {
         //request.sortDescriptors?.append(NSSortDescriptor(key: "rate", ascending: true))
         
         do {
-            result = try context().executeFetchRequest(request)
+            result = try context().fetch(request)
         } catch let error as NSError {
             NSLog(error.localizedDescription)
         }
         
         return result
     }
+ */
 }

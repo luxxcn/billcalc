@@ -7,18 +7,47 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 //import CoreData
 
 
 extension NSString {
     func isPureInt()->Bool{
-        let scanner:NSScanner = NSScanner(string: self as String)
-        return scanner.scanInt(UnsafeMutablePointer<Int32>.alloc(1)) && scanner.atEnd
+        let scanner:Scanner = Scanner(string: self as String)
+        return scanner.scanInt32(UnsafeMutablePointer<Int32>.allocate(capacity: 1)) && scanner.isAtEnd
     }
     
     func isPureFloat()->Bool{
-        let scanner:NSScanner = NSScanner(string: self as String)
-        return scanner.scanFloat(UnsafeMutablePointer<Float>.alloc(1)) && scanner.atEnd
+        let scanner:Scanner = Scanner(string: self as String)
+        return scanner.scanFloat(UnsafeMutablePointer<Float>.allocate(capacity: 1)) && scanner.isAtEnd
     }
     
     func isNumeric()->Bool{
@@ -28,11 +57,11 @@ extension NSString {
 
 enum CalcStatus
 {
-    case NeedDate
-    case ErrorDate
-    case NeedRate
-    case NeedMoney
-    case End
+    case needDate
+    case errorDate
+    case needRate
+    case needMoney
+    case end
 }
 
 class ViewController: UIViewController {
@@ -42,14 +71,14 @@ class ViewController: UIViewController {
     @IBOutlet var buttons: [UIButton]!
     @IBOutlet var btnRateTypes: [UIButton]!
     
-    var status:CalcStatus = CalcStatus.End
+    var status:CalcStatus = CalcStatus.end
     var rateType:Int = 0
-    let dateFmt = NSDateFormatter()
+    let dateFmt = DateFormatter()
     //let numberFmt = NSNumberFormatter()
     
     //var days:Int = 0
-    var endDate:NSDate = NSDate()
-    var today:NSDate = NSDate()
+    var endDate:Date = Date()
+    var today:Date = Date()
     var adddays:Int = 3
     var monthRate:Double = 0.00 //月利率
     var rate:Double = 0.00 //买断
@@ -60,8 +89,8 @@ class ViewController: UIViewController {
     //var maxGuid = g_rates.count
     //var dbRate:Rate = Rate() //存入库数据的数据
     
-    var fontMedium = UIFont.systemFontOfSize(24.0, weight: 0.3)
-    var fontLight = UIFont.systemFontOfSize(24.0, weight: -0.7)
+    var fontMedium = UIFont.systemFont(ofSize: 24.0, weight: 0.3)
+    var fontLight = UIFont.systemFont(ofSize: 24.0, weight: -0.7)
     var needMoney:Bool = false
     //var auto:Bool = false //自动计算下一步
     let details:[String] = ["输入到期日", "输入利率", "输入金额"]
@@ -74,7 +103,7 @@ class ViewController: UIViewController {
 
         for btn in buttons
         {
-            btn.setBackgroundImage(imageWithColor(UIColor.grayColor()), forState: UIControlState.Highlighted)
+            btn.setBackgroundImage(imageWithColor(UIColor.gray), for: UIControlState.highlighted)
         }
         
         let panGesture = UIPanGestureRecognizer(target: self, action:#selector(ViewController.handlePanGesture(_:)))
@@ -92,21 +121,21 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func imageWithColor(color:UIColor)->UIImage {
-        let rect:CGRect = CGRectMake(0.0, 0.0, 1.0, 1.0)
+    func imageWithColor(_ color:UIColor)->UIImage {
+        let rect:CGRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
         
         UIGraphicsBeginImageContext(rect.size)
-        let context:CGContextRef = UIGraphicsGetCurrentContext()!
+        let context:CGContext = UIGraphicsGetCurrentContext()!
     
-        CGContextSetFillColorWithColor(context, color.CGColor)
-        CGContextFillRect(context, rect)
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
         
-        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return image
     }
     
-    @IBAction func rateSelect(sender: UIButton) {
+    @IBAction func rateSelect(_ sender: UIButton) {
         if(rateType == sender.tag)
         {
             return
@@ -126,39 +155,39 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func needMoney(sender: UIButton) {
+    @IBAction func needMoney(_ sender: UIButton) {
         needMoney = !needMoney
         sender.titleLabel?.font = needMoney ? fontMedium : fontLight
-        if(needMoney && rate > 0 && status == .End && labDetail.text != "")
+        if(needMoney && rate > 0 && status == .end && labDetail.text != "")
         {
             refreshScreen()
-            status = .NeedMoney
+            status = .needMoney
         }
-        if(!needMoney && status == .NeedMoney) {
-            status = .End
+        if(!needMoney && status == .needMoney) {
+            status = .end
         }
     }
 
-    @IBAction func clickNumber(sender: UIButton) {
+    @IBAction func clickNumber(_ sender: UIButton) {
         var max_len = 4
         let number:String = (sender.titleLabel?.text)!
         
-        if((labMain.text)!.rangeOfString(",") == nil && !(labMain.text! as NSString).isNumeric())
+        if((labMain.text)!.range(of: ",") == nil && !(labMain.text! as NSString).isNumeric())
         {
             labMain.text = ""
         }
         
         switch(status)
         {
-        case .End:
+        case .end:
             doReset(sender)
-            status = .NeedDate
+            status = .needDate
             //labDetail.font = UIFont.systemFontOfSize(24.0)
-        case .NeedDate:
+        case .needDate:
             break
-        case .NeedMoney:
+        case .needMoney:
             max_len = 14 //100,000,000.00，应该判断金额大小还是字符串长度呢？
-        case .NeedRate:
+        case .needRate:
             max_len = 5
         default:
             break;
@@ -171,14 +200,14 @@ class ViewController: UIViewController {
             return
         }
         
-        if(number == "00" && (status == .NeedDate || content.characters.count + 2 >= max_len))
+        if(number == "00" && (status == .needDate || content.characters.count + 2 >= max_len))
         {
             return
         }
         
         if(number == ".")
         {
-            if(content.rangeOfString(".") != nil || status == .NeedDate)
+            if(content.range(of: ".") != nil || status == .needDate)
             {
                 return
             }
@@ -187,7 +216,7 @@ class ViewController: UIViewController {
                 labMain.text = "0."
                 return
             }
-            if(content.rangeOfString(".") == nil)
+            if(content.range(of: ".") == nil)
             {
                 content += "."
                 labMain.text = content
@@ -200,42 +229,42 @@ class ViewController: UIViewController {
             content = ""
         }
         
-        if(status != .NeedDate && content != "" && content.rangeOfString(".") == nil)
+        if(status != .needDate && content != "" && content.range(of: ".") == nil)
         {
             //content = formatMoney(content, set: false)
             content = sMoneyHandle.formatMoney(content, set: false)
         }
         content += number;
         
-        if(status == .NeedMoney && Double(content) >= 1000000000.00) //10亿内计算
+        if(status == .needMoney && Double(content) >= 1000000000.00) //10亿内计算
         {
             return
         }
         
-        if(status != .NeedDate && content.rangeOfString(".") == nil)
+        if(status != .needDate && content.range(of: ".") == nil)
         {
             content = sMoneyHandle.formatMoney(content, set: true)
         }
         labMain.text = content
     }
 
-    @IBAction func doReset(sender: UIButton) {
-        if(status != .End) {
+    @IBAction func doReset(_ sender: UIButton) {
+        if(status != .end) {
             labMain.text = details[0]
         } else {
             labMain.text = ""
         }
         labDetail.text = ""
-        endDate = NSDate()
+        endDate = Date()
         rate = 0.0
         money = 0.0
         adddays = 3
-        status = .End
+        status = .end
     }
     
-    @IBAction func backspace(sender: UIButton) {
-        var content:NSString = labMain.text!
-        if(status == .End || (labMain.text)!.rangeOfString(",") == nil && !content.isNumeric())
+    @IBAction func backspace(_ sender: UIButton) {
+        var content:NSString = labMain.text! as NSString
+        if(status == .end || (labMain.text)!.range(of: ",") == nil && !content.isNumeric())
         {
             return
         }
@@ -243,33 +272,33 @@ class ViewController: UIViewController {
         {
             switch status
             {
-            case .NeedRate:
-                content = details[1]
-            case .NeedMoney:
-                content = details[2]
+            case .needRate:
+                content = details[1] as NSString
+            case .needMoney:
+                content = details[2] as NSString
             default:// needdate, end
-                content = details[0]
-                status = .End
+                content = details[0] as NSString
+                status = .end
             }
         }
         else
         {
-            if((labMain.text)!.rangeOfString(",") != nil && labMain.text?.rangeOfString(".") == nil)
+            if((labMain.text)!.range(of: ",") != nil && labMain.text?.range(of: ".") == nil)
             {
-                content = sMoneyHandle.formatMoney(content as String, set: false)
-                content = content.substringToIndex(content.length - 1)
-                content = sMoneyHandle.formatMoney(content as String, set: true)
+                content = sMoneyHandle.formatMoney(content as String, set: false) as NSString
+                content = content.substring(to: content.length - 1) as NSString
+                content = sMoneyHandle.formatMoney(content as String, set: true) as NSString
             }
             else
             {
-                content = content.substringToIndex(content.length - 1)
+                content = content.substring(to: content.length - 1) as NSString
             }
         }
         labMain.text = content as String
     }
     
     // 返回：1,日期转化错误  2,2月最后一日不正确
-    func isInvalidDate(year:Int, month:Int, day:Int)->Int {
+    func isInvalidDate(_ year:Int, month:Int, day:Int)->Int {
         var errorDate = 0;
         var maxMonthDay = 30
 
@@ -305,7 +334,7 @@ class ViewController: UIViewController {
     }
     
     func calcDays()->Bool{
-        let content:NSString = labMain.text!;
+        let content:NSString = labMain.text! as NSString;
         if(content.length < 2)
         {
             labDetail.text = "输入到期日,如：0303表示3月3日"
@@ -314,9 +343,9 @@ class ViewController: UIViewController {
         
         
         //today = NSDate()
-        let todayStr = dateFmt.stringFromDate(today)
-        today = dateFmt.dateFromString(todayStr)! //抹掉时间，只保留日期，便于准确到期天数
-        var dates:[String] = todayStr.componentsSeparatedByString("-")
+        let todayStr = dateFmt.string(from: today)
+        today = dateFmt.date(from: todayStr)! //抹掉时间，只保留日期，便于准确到期天数
+        var dates:[String] = todayStr.components(separatedBy: "-")
         var year = dates[0]
         let month = dates[1]
         let day = dates[2]
@@ -327,14 +356,14 @@ class ViewController: UIViewController {
         switch content.length
         {
         case 2:
-            endMonth = content.substringToIndex(1)
-            endDay = content.substringWithRange(NSRange(location: 1, length: 1))
+            endMonth = content.substring(to: 1)
+            endDay = content.substring(with: NSRange(location: 1, length: 1))
         case 3:
-            endMonth = content.substringToIndex(1)
-            endDay = content.substringWithRange(NSRange(location: 1, length: 2))
+            endMonth = content.substring(to: 1)
+            endDay = content.substring(with: NSRange(location: 1, length: 2))
         default:// 4
-            endMonth = content.substringToIndex(2)
-            endDay = content.substringWithRange(NSRange(location: 2, length: 2))
+            endMonth = content.substring(to: 2)
+            endDay = content.substring(with: NSRange(location: 2, length: 2))
         }
         
         //如果到期日小于等于当前日，则年份加1年
@@ -359,9 +388,9 @@ class ViewController: UIViewController {
             return false
         }
         
-        endDate = dateFmt.dateFromString(year + "-" + endMonth + "-" + endDay)!
+        endDate = dateFmt.date(from: year + "-" + endMonth + "-" + endDay)!
         
-        dates = dateFmt.stringFromDate(endDate).componentsSeparatedByString("-")
+        dates = dateFmt.string(from: endDate).components(separatedBy: "-")
         
         let weekDay = endDate.dayOfWeek()
         adddays = 3
@@ -380,7 +409,7 @@ class ViewController: UIViewController {
         let days = endDate.daysSinceToday()
         if(days > 0) {
             let weekDay = endDate.dayOfWeek()
-            labDetail.text = dateFmt.stringFromDate(endDate) + " 周"+WEEK_CN[weekDay] + "," + String(days) + "+" + String(adddays) + "天"
+            labDetail.text = dateFmt.string(from: endDate) + " 周"+WEEK_CN[weekDay] + "," + String(days) + "+" + String(adddays) + "天"
         }
         if(rate > 0) {
             if(rateType == 2) //直接设置买断扣息
@@ -410,25 +439,25 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func doOK(sender: UIButton) {
+    @IBAction func doOK(_ sender: UIButton) {
         
-        let content:NSString = labMain.text!;
+        let content:NSString = labMain.text! as NSString;
         
-        if(!content.isNumeric() && (labMain.text)!.rangeOfString(",") == nil)
+        if(!content.isNumeric() && (labMain.text)!.range(of: ",") == nil)
         {
             return;
         }
         
         switch status
         {
-        case .NeedDate://输入日期，或到期天数，或金额，3位数判断为天数，4位数判断为日期，5位数以上判断为金额
+        case .needDate://输入日期，或到期天数，或金额，3位数判断为天数，4位数判断为日期，5位数以上判断为金额
             if(calcDays())
             {
                 refreshScreen()
-                status = .NeedRate
+                status = .needRate
                 labMain.text = details[1]
             }
-        case .NeedRate:
+        case .needRate:
             rate = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!//有逗号会出错
             let days = endDate.daysSinceToday()
             if(rateType == 0)
@@ -452,19 +481,19 @@ class ViewController: UIViewController {
             if(needMoney)
             {
                 labMain.text = details[2]
-                status = .NeedMoney
+                status = .needMoney
             }
             else
             {
-                status = .End
+                status = .end
             }
-        case .NeedMoney:
+        case .needMoney:
             money = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!
             if(money > 0) {
                 refreshScreen()
             }
-            status = .End
-        case .End:
+            status = .end
+        case .end:
             labDetail.text = ""
             labMain.text = details[0]
         default:
@@ -472,12 +501,12 @@ class ViewController: UIViewController {
         }
     }
     
-    func handlePanGesture(sender:UIPanGestureRecognizer) {
-        let translation = sender.translationInView(self.view)
-        if(sender.state == .Began) {
+    func handlePanGesture(_ sender:UIPanGestureRecognizer) {
+        let translation = sender.translation(in: self.view)
+        if(sender.state == .began) {
             beganAdddays = adddays
         }
-        if(sender.state == .Changed){
+        if(sender.state == .changed){
             if(endDate.daysSinceToday() > 0) {
                 let changeAddDays = Int(translation.x / 10.0)
                 adddays = beganAdddays + changeAddDays

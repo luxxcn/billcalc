@@ -20,8 +20,8 @@ class GuideViewController: UIViewController, UIScrollViewDelegate {
         scrollView.frame = self.view.bounds
         scrollView.delegate = self
         // 让内容横向移动，设置内容为4个页面宽度
-        scrollView.contentSize = CGSizeMake(frame.size.width * CGFloat(numOfPage), frame.size.height)
-        scrollView.pagingEnabled = true
+        scrollView.contentSize = CGSize(width: frame.size.width * CGFloat(numOfPage), height: frame.size.height)
+        scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.scrollsToTop = false
@@ -29,28 +29,28 @@ class GuideViewController: UIViewController, UIScrollViewDelegate {
             let imgfile = "guide\(Int(i+1)).png"
             let image = UIImage(named: "\(imgfile)")
             let imgView = UIImageView(image: image)
-            imgView.frame = CGRectMake(frame.size.width*CGFloat(i), CGFloat(0), frame.size.width, frame.size.height)
+            imgView.frame = CGRect(x: frame.size.width*CGFloat(i), y: CGFloat(0), width: frame.size.width, height: frame.size.height)
             scrollView.addSubview(imgView)
         }
-        scrollView.contentOffset = CGPointZero
+        scrollView.contentOffset = CGPoint.zero
         self.view.addSubview(scrollView)
         
     }
     
     // scrollView 滑动时调用
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let twidth = CGFloat(numOfPage - 1) * self.view.bounds.size.width
         // 如果在最后一个界面，继续滑动会进入主界面
         if(scrollView.contentOffset.x > twidth) {
             let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = mainStoryboard.instantiateInitialViewController()
-            viewController?.modalTransitionStyle = .FlipHorizontal
+            viewController?.modalTransitionStyle = .flipHorizontal
             
             // 自定义过渡动画
             //let animation = CATransition()
             //animation.duration = 1.0
             
-            self.presentViewController(viewController!, animated: true, completion: nil)
+            self.present(viewController!, animated: true, completion: nil)
         }
     }
 

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-var g_rates:[Rate] = Rate.LoadAllData()
+//var g_rates:[Rate] = Rate.LoadAllData()
 
 @objc(Rate) class Rate: NSManagedObject {
 
@@ -19,12 +19,12 @@ var g_rates:[Rate] = Rate.LoadAllData()
     init()
     {
         let context = sDatabase.context()
-        let entity = NSEntityDescription.entityForName("Rate", inManagedObjectContext: context)
-        super.init(entity: entity!, insertIntoManagedObjectContext: context)
+        let entity = NSEntityDescription.entity(forEntityName: "Rate", in: context)
+        super.init(entity: entity!, insertInto: context)
     }
     
-    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertInto: context)
     }
     
     func saveToDB() {
@@ -33,17 +33,18 @@ var g_rates:[Rate] = Rate.LoadAllData()
     }
     
     func deleteFromDB() {
-        for i in 0...g_rates.count - 1
+        /*for i in 0...g_rates.count - 1
         {
             if(g_rates[i].objectID == self.objectID)
             {
-                g_rates.removeAtIndex(i)
+                g_rates.remove(at: i)
                 break
             }
         }
         
-        sDatabase.context().deleteObject(self)
+        sDatabase.context().delete(self)
         sDatabase.save()
+ */
     }
     
 //    class func GetRateByGuid(guid:Int)->Rate? {
@@ -53,7 +54,8 @@ var g_rates:[Rate] = Rate.LoadAllData()
 //    }
     
     // 读取所有数据
-    class func LoadAllData()->[Rate] {
+    /*class func LoadAllData()->[Rate] {
         return sDatabase.loadDataForEntity("Rate", predicate: "rate > 0.0") as! [Rate]
     }
+ */
 }
