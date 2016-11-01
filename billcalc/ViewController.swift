@@ -71,6 +71,8 @@ class ViewController: UIViewController {
     @IBOutlet var buttons: [UIButton]!
     @IBOutlet var btnRateTypes: [UIButton]!
     
+    var labTip = UILabel()
+    
     var status:CalcStatus = CalcStatus.end
     var rateType:Int = 0
     let dateFmt = DateFormatter()
@@ -94,6 +96,8 @@ class ViewController: UIViewController {
     var needMoney:Bool = false
     //var auto:Bool = false //自动计算下一步
     let details:[String] = ["输入到期日", "输入利率", "输入金额"]
+    let tips:[String] = ["到期日", "利率", "余金额"]
+    let rateTips:[String] = ["月利率", "年利率", "百分比"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,8 +110,21 @@ class ViewController: UIViewController {
             btn.setBackgroundImage(imageWithColor(UIColor.gray), for: UIControlState.highlighted)
         }
         
-        let panGesture = UIPanGestureRecognizer(target: self, action:#selector(ViewController.handlePanGesture(_:)))
+        //let labTip = UILabel()
+        let content:NSString = NSString(string: tips[0])
+        let attributes = [NSFontAttributeName:UIFont.systemFont(ofSize: 20)]
+        let txtSize = content.boundingRect(with: CGSize(width:100, height:100), options: NSStringDrawingOptions.truncatesLastVisibleLine, attributes: attributes, context: nil).size
+        let frame = UIScreen.main.bounds
+        labTip.layer.masksToBounds = true
+        labTip.layer.cornerRadius = 5
+        labTip.text = content as String
+        labTip.textAlignment = .center
+        labTip.backgroundColor = UIColor.gray
+        labTip.textColor = UIColor.white
+        labTip.frame = CGRect(x: frame.width - txtSize.width - 20, y: 3, width: txtSize.width, height: txtSize.height)
+        labMain.addSubview(labTip)
         
+        let panGesture = UIPanGestureRecognizer(target: self, action:#selector(ViewController.handlePanGesture(_:)))
         //todo: 只设置显示区可以出发滑动，因为会影响点击按钮效果。
         //labMain.gestureRecognizers = nil
         //labMain.addGestureRecognizer(panGesture)
@@ -153,6 +170,9 @@ class ViewController: UIViewController {
                 btn.titleLabel?.font = fontLight;
             }
         }
+        if(status == .needRate) {
+            labTip.text = rateTips[rateType]
+        }
     }
     
     @IBAction func needMoney(_ sender: UIButton) {
@@ -166,6 +186,7 @@ class ViewController: UIViewController {
         if(!needMoney && status == .needMoney) {
             status = .end
         }
+        labTip.text = "票金额"
     }
 
     @IBAction func clickNumber(_ sender: UIButton) {
@@ -175,6 +196,7 @@ class ViewController: UIViewController {
         if((labMain.text)!.range(of: ",") == nil && !(labMain.text! as NSString).isNumeric())
         {
             labMain.text = ""
+            labTip.text = tips[0]
         }
         
         switch(status)
@@ -251,10 +273,14 @@ class ViewController: UIViewController {
     @IBAction func doReset(_ sender: UIButton) {
         if(status != .end) {
             labMain.text = details[0]
+            labTip.text = tips[0]
+            labDetail.text = "成都承兑汇票贴现、转让：\r\n电话13308216781"
         } else {
             labMain.text = ""
+            labTip.text = tips[0]
+            labDetail.text = ""
         }
-        labDetail.text = ""
+        
         endDate = Date()
         rate = 0.0
         money = 0.0
@@ -456,6 +482,7 @@ class ViewController: UIViewController {
                 refreshScreen()
                 status = .needRate
                 labMain.text = details[1]
+                labTip.text = rateTips[rateType]
             }
         case .needRate:
             rate = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!//有逗号会出错
@@ -482,20 +509,24 @@ class ViewController: UIViewController {
             {
                 labMain.text = details[2]
                 status = .needMoney
+                labTip.text = "票金额"
             }
             else
             {
                 status = .end
+                labTip.text = "买断价"
             }
         case .needMoney:
             money = Double(sMoneyHandle.formatMoney(labMain.text!, set: false))!
             if(money > 0) {
                 refreshScreen()
+                labTip.text = "余金额"
             }
             status = .end
         case .end:
             labDetail.text = ""
             labMain.text = details[0]
+            labTip.text = "到期日"
         default:
             break
         }
