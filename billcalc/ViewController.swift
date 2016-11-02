@@ -196,7 +196,6 @@ class ViewController: UIViewController {
         if((labMain.text)!.range(of: ",") == nil && !(labMain.text! as NSString).isNumeric())
         {
             labMain.text = ""
-            labTip.text = tips[0]
         }
         
         switch(status)

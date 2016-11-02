@@ -38,9 +38,9 @@ extension Date {
     }
     
     func components()->NSDateComponents {
-        let canlendar = NSCalendar.currentCalendar()
-        let flags:NSCalendarUnit = [.Year, .Month, .Day]
-        return canlendar.components(flags, fromDate: self)
+        let canlendar = NSCalendar.current
+        //let flags:NSCalendar.Unit = [.year, .month, .day]
+        return canlendar.dateComponents([.year, .month, .day], from: self) as NSDateComponents
     }
     
     func isLeapYear()->Bool{
