@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class ViewController: UIViewController {
 
@@ -57,9 +58,8 @@ class ViewController: UIViewController {
         
         let panGesture = UIPanGestureRecognizer(
             target: self, action:#selector(ViewController.handlePanGesture(_:)))
-        /// TODO: 只设置显示区可以出发滑动，因为会影响点击按钮效果。
         self.viewResult.addGestureRecognizer(panGesture)
-        refreshScreen(tag: 1001)
+        labDetail.text = calcLogic.updateDetailLabel() // show slogan
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,6 +86,9 @@ class ViewController: UIViewController {
                                                  tag: tag)
         labTip.text = calcLogic.updateTipLabel()
         labDetail.text = calcLogic.updateDetailLabel()
+        
+        // 按键音 KeyPressClickPreview
+        AudioServicesPlaySystemSound(1306)
     }
     
     @IBAction func rateSelect(_ sender: UIButton) {
