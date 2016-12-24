@@ -32,6 +32,7 @@
 		33B276F11C91CD650018EB8C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B276EF1C91CD650018EB8C /* LaunchScreen.storyboard */; };
 		33B276FC1C91CD650018EB8C /* billcalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B276FB1C91CD650018EB8C /* billcalcTests.swift */; };
 		33B277071C91CD650018EB8C /* billcalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B277061C91CD650018EB8C /* billcalcUITests.swift */; };
+		33FC1FA71E041320006DCE43 /* CalcLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FC1FA61E041320006DCE43 /* CalcLogic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		33B277021C91CD650018EB8C /* billcalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = billcalcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33B277061C91CD650018EB8C /* billcalcUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = billcalcUITests.swift; sourceTree = "<group>"; };
 		33B277081C91CD650018EB8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33FC1FA61E041320006DCE43 /* CalcLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalcLogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 				33B276E31C91CD650018EB8C /* AppDelegate.swift */,
 				334A4FC61D680004007A7306 /* GuideViewController.swift */,
 				33B276E51C91CD650018EB8C /* ViewController.swift */,
+				33FC1FA61E041320006DCE43 /* CalcLogic.swift */,
 				3313F50B1CAAC623008705FD /* MoneyHandle.swift */,
 				3301D3DA1D4E3F0100E74562 /* DateTimeHandle.swift */,
 				3313F5071CA80327008705FD /* HistoryViewController.swift */,
@@ -352,6 +355,7 @@
 				33B276E61C91CD650018EB8C /* ViewController.swift in Sources */,
 				3313F50A1CAAC005008705FD /* RateTableViewCell.swift in Sources */,
 				3383C7941C9C39D40088657C /* Database.swift in Sources */,
+				33FC1FA71E041320006DCE43 /* CalcLogic.swift in Sources */,
 				3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */,
 				33B276E41C91CD650018EB8C /* AppDelegate.swift in Sources */,
 				33B276EC1C91CD650018EB8C /* billcalc.xcdatamodeld in Sources */,
