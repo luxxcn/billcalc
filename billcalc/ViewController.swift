@@ -33,7 +33,8 @@ class ViewController: UIViewController {
         for btn in buttons
         {
             btn.setBackgroundImage(imageWithColor(UIColor.gray),
-                                   for: UIControlState.highlighted)
+                                   for: .highlighted)
+            btn.setTitleColor(UIColor.white, for: .highlighted)
         }
         
         // 提示信息

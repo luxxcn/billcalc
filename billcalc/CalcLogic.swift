@@ -86,13 +86,13 @@ class CalcLogic {
                 return calculate(aString: string)
             }
         case 100: // "00"
-            if phase != .datePhase &&
+            if phase != .datePhase && string.isNumeric() &&
                 (string.range(of: ".") != nil || Double(string)! > 0.0) {
                     string.append("00")
             }
         case 101: // "."
             if phase != .datePhase && string.characters.count > 0 {
-                if string.range(of: ".") == nil {
+                if string.isNumeric() && string.range(of: ".") == nil {
                     string.append(".")
                 }
             }
@@ -112,7 +112,7 @@ class CalcLogic {
             if needMoney && phase == .ratePhase{
                 phase = .moneyPhase
                 calcEnd = false
-                string = "0"
+                string = "输入金额"
             } else if phase == .moneyPhase {
                 calcEnd = true
             }
