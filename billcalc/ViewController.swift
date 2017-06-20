@@ -105,6 +105,8 @@ class ViewController: UIViewController {
         }
         
         labTip.text = calcLogic.updateTipLabel()
+        // 按键音 KeyPressClickPreview
+        AudioServicesPlaySystemSound(1306)
     }
     
     @IBAction func needMoney(_ sender: UIButton) {
@@ -137,8 +139,7 @@ class ViewController: UIViewController {
         let translation = sender.translation(in: self.view)
         if(sender.state == .began) {
             beganAdddays = calcLogic.adddays
-        }
-        if(sender.state == .changed){
+        } else if(sender.state == .changed){
             
             let changeAddDays = Int(translation.x / 10.0)
             var adddays = beganAdddays + changeAddDays

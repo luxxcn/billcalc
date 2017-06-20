@@ -70,8 +70,7 @@ class DateTimeHandle: NSObject {
     var dateFormatter = DateFormatter()
     let holidaysCN = ["1-1":"春节", "1-2":"春节", "1-3":"春节", "1-4":"春节",
                       "1-5":"春节", "1-6":"春节", "1-7":"春节",//春节默认7天假
-                      "1-15":"元宵", "5-5":"端午", "7-7":"七夕", "7-15":"中元",
-                      "8-15":"中秋", "9-9":"重阳", "12-8":"腊八", "12-30":"除夕"]
+                      "5-5":"端午", "8-15":"中秋", "12-30":"除夕"]
     let holidays = ["1-1":"元旦", "2-14":"情人", "3-8":"妇女", "3-12":"植树",
                     "5-1":"劳动", "5-4":"青年", "6-1":"儿童", "7-1":"建党",
                     "8-1":"建军", "9-10":"教师", "10-1":"国庆", "10-2":"国庆",
@@ -402,6 +401,13 @@ class DateTimeHandle: NSObject {
         
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: from)
+    }
+    
+    func dateSinceToday(withDays days: Int) -> Date {
+        
+        let compnenets = Date().components()
+        let today = createDate(year: compnenets.year!, month: compnenets.month!, day: compnenets.day!)
+        return (today?.addingTimeInterval(TimeInterval(D_DAY * days)))!
     }
     
 }

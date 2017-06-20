@@ -109,7 +109,7 @@ class CalcLogic {
             calcEnd = true
         case 1002:
             self.needMoney = !needMoney
-            if needMoney && phase == .ratePhase{
+            if needMoney && monthlyRate != nil{
                 phase = .moneyPhase
                 calcEnd = false
                 string = "输入金额"
