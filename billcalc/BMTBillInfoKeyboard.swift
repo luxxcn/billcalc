@@ -8,6 +8,14 @@
 
 import UIKit
 
+let selectedImage = sColorHelper.imageFrom(hex: 0xe8ecf0)
+let normalImage = sColorHelper.imageFrom(color: UIColor.white)
+let whiteImage = sColorHelper.imageFrom(color: UIColor.white)
+let specialNormalImage = sColorHelper.imageFrom(hex: 0xd1d5da)
+
+let backspaceImageNormal = UIImage(named: "backspace-normal")
+let backspaceImageHighlighted = UIImage(named: "backspace-touched")
+
 class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
 
     /*
@@ -21,14 +29,13 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
     //var cell:BCBillPriceCell?
     //var tableView:UITableView?
     //var logic:QuotationLogic?
+    var rateCell:BCBaseRateCell?
+    var isSetBaseRate = false
     
     var bankTypeButtons = [UIButton?]()
     
     var moneyDateButtons = [UIButton?]()
     var selectedMoney = true
-    
-    let selectedImage = sColorHelper.imageFrom(color: UIColor.gray)
-    let normalImage = sColorHelper.imageFrom(color: UIColor.white)
     
     override init(textField: UITextField?, searchBar: UISearchBar?) {
         
@@ -36,9 +43,14 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
         textField?.delegate = self
     }
     
-    convenience init(textField: UITextField?) {
+    convenience init(textField: UITextField?, baseRate: Bool = false) {
         
         self.init(textField: textField, searchBar: nil)
+        
+        self.isSetBaseRate = baseRate
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: .UIKeyboardDidHide, object: nil)
         
         // bank type
         let count = BankType.count
@@ -47,12 +59,14 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
         buttonFrame.size.width = frame.width / 5.0
         for i in 0..<count {
             
-            buttonFrame.origin.y = buttonFrame.height * CGFloat(i) + CGFloat(1 * i)
+            buttonFrame.origin.y = buttonFrame.height * CGFloat(i) + CGFloat(0.5 * Double(i))
             
             let button = UIButton(frame:buttonFrame)
             button.setTitleColor(UIColor.black, for: .normal)
             button.addTarget(self, action: #selector(clickedBankButton(_:)), for: .touchUpInside)
-            button.setBackgroundImage(normalImage, for: .normal)
+            button.setBackgroundImage(specialNormalImage, for: .normal)
+            button.setBackgroundImage(selectedImage, for: .highlighted)
+            button.setBackgroundImage(selectedImage, for: .selected)
             button.setTitle(BankType(rawValue: i)?.value, for: .normal)
             button.tag = i
             self.addSubview(button)
@@ -60,15 +74,16 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
         }
         
         // number
-        buttonFrame.size.height = frame.height / 5.0
+        buttonFrame.size.height = isSetBaseRate ? frame.height / 4.0 : frame.height / 5.0
         buttonFrame.origin.y = 0
         for i in 1...12 {
             
-            let offsetX = CGFloat((i + 2) % 3 + 1)
-            buttonFrame.origin.x = buttonFrame.width * offsetX + offsetX
+            let offsetX = CGFloat(Double((i + 2) % 3) + 1)
+            buttonFrame.origin.x = buttonFrame.width * offsetX + offsetX - offsetX / 2
+            
             if i == 4 || i == 7 || i == 10 {
                 
-                buttonFrame.origin.y += buttonFrame.height + 1
+                buttonFrame.origin.y += buttonFrame.height + 0.5
             }
             var title = ""
             switch i {
@@ -86,52 +101,68 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
             button.addTarget(self, action: #selector(clickedNumButton(_:)), for: .touchUpInside)
             button.setTitleColor(UIColor.black, for: .normal)
             button.setTitle(title, for: .normal)
-            button.setBackgroundImage(sColorHelper.imageFrom(color: UIColor.white), for: .normal)
+            button.setBackgroundImage(whiteImage, for: .normal)
+            button.setBackgroundImage(specialNormalImage, for: .highlighted)
             button.tag = i
             self.addSubview(button)
         }
         
         // 金额、日期
         var titles = ["金额", "到期日"]
-        buttonFrame.origin.x = buttonFrame.width + 1
-        buttonFrame.origin.y += buttonFrame.height + 1
+        buttonFrame.origin.x = buttonFrame.width + 0.5
+        buttonFrame.origin.y += buttonFrame.height + 0.5
         buttonFrame.size.width *= 3 / 2
         
         for i in 0...1 {
             
-            buttonFrame.origin.x += buttonFrame.width * CGFloat(i) + CGFloat(i)
-            buttonFrame.size.width += CGFloat(i)
+            buttonFrame.origin.x += buttonFrame.width * CGFloat(i) + CGFloat(i) / 2
+            buttonFrame.size.width += CGFloat(i) / 2
             
             let button = UIButton(frame: buttonFrame)
-            button.setTitleColor(UIColor.black, for: .normal)
-            button.setBackgroundImage(sColorHelper.imageFrom(color: UIColor.white), for: .normal)
+            button.setBackgroundImage(specialNormalImage, for: .normal)
+            button.setBackgroundImage(selectedImage, for: .highlighted)
+            button.setBackgroundImage(selectedImage, for: .selected)
             button.setTitle(titles[i], for: .normal)
+            button.setTitleColor(UIColor.black, for: .normal)
             button.tag = i
             button.addTarget(self, action: #selector(clickedMoneyDateButton(_:)), for: .touchUpInside)
-            self.addSubview(button)
-            self.moneyDateButtons.append(button)
+            
+            if isSetBaseRate == false {
+                self.addSubview(button)
+                self.moneyDateButtons.append(button)
+            }
         }
         
-        // < ↑ ⬇️ + -
-        titles = ["<-", "⬆️", "⬇️", "+", "-"]
+        // ⌫ ↑ ⬇️ + -
+        titles = ["", "⇧", "⇩", "+", "-"]
         buttonFrame.origin.y = 0
-        buttonFrame.size.width = frame.width / 5
-        buttonFrame.origin.x = buttonFrame.width * 4 + 4
+        buttonFrame.size.width = frame.width / 5.0
+        buttonFrame.size.height = frame.height / 5.0
+        buttonFrame.origin.x = buttonFrame.width * 4 + 2
         for i in 0..<titles.count {
             
-            buttonFrame.origin.y = buttonFrame.height * CGFloat(i) + CGFloat(1 * i)
+            buttonFrame.origin.y = buttonFrame.height * CGFloat(i) + CGFloat(0.5 * Double(i))
             
             let button = UIButton(frame: buttonFrame)
             button.setTitleColor(UIColor.black, for: .normal)
-            button.setBackgroundImage(sColorHelper.imageFrom(color: UIColor.white), for: .normal)
+            //button.setTitleColor(UIColor.white, for: .highlighted)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 21, weight: UIFontWeightRegular)
+            button.setBackgroundImage(specialNormalImage, for: .normal)
+            button.setBackgroundImage(whiteImage, for: .highlighted)
             button.setTitle(titles[i], for: .normal)
             button.tag = i
             self.addSubview(button)
             
-            // touch up inside
+            // backspace
             if i == 0 {
                 
-                button.addTarget(self, action: #selector(clickedBackspaceButton), for: .touchUpInside)
+                button.setImage(backspaceImageNormal, for: .normal)
+                button.setImage(backspaceImageHighlighted, for: .highlighted)
+                button.adjustsImageWhenHighlighted = false
+                let edgeX = buttonFrame.width - 27
+                let edgeY = buttonFrame.height - 20
+                button.imageEdgeInsets = UIEdgeInsetsMake(edgeY, edgeX, edgeY, edgeX)
+                button.addTarget(self, action: #selector(clickedBackspaceButton(_:)), for: .touchUpInside)
             }
             
             // select button
@@ -144,6 +175,7 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
             // adjust button
             if i == 3 || i == 4 {
                 
+                button.titleLabel?.font = UIFont.systemFont(ofSize: 30)
                 button.addTarget(self, action: #selector(clickedAdjustButton(_:)), for: .touchUpInside)
                 if i == 3 {
                     
@@ -158,7 +190,17 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
         }
     }
     
+    func keyboardWillHide() {
+        
+        rateCell?.unselected()
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        if isSetBaseRate {
+            
+            return
+        }
         
         sLogic.currSelected = IndexPath(row: -1, section: 0)
         sLogic.reloadData()
@@ -167,52 +209,93 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
     func clickedNumButton(_ sender: UIButton) {
         
         let num = sender.titleLabel?.text
-        if selectedMoney {
+        
+        if isSetBaseRate || rateCell != nil {
             
-            sLogic.updateBill(addMoney: num!)
+            rateCell?.updateLabText(text: (sender.titleLabel?.text)!)
         } else {
-            
-            sLogic.updateBill(endDate: num!)
+        
+            if selectedMoney {
+                
+                sLogic.updateBill(addMoney: num!)
+            } else {
+                
+                sLogic.updateBill(endDate: num!)
+            }
         }
     }
     
-    func clickedBackspaceButton() {
+    func clickedBackspaceButton(_ sender: UIButton) {
         
-        if selectedMoney {
+        if isSetBaseRate {
+            
+            rateCell?.backspaceLabelText()
+        } else if selectedMoney {
             
             sLogic.backspaceMoney()
         } else {
             
             sLogic.backspaceDate()
         }
+        
     }
     
     func clickedSelectButton(_ sender: UIButton) {
         
-        sLogic.selectBill(up: sender.tag == 1)
+        if isSetBaseRate {
+            
+            let currBankType = rateCell?.currentSelectedBankType
+            var changeRawValue = currBankType?.rawValue
+            changeRawValue = sender.tag == 1 ? changeRawValue! - 1 : changeRawValue! + 1
+            
+            if changeRawValue! >= BankType.bankTypeState.rawValue
+                && changeRawValue! < BankType.count {
+                
+                self.selectBankTypeButton(at: changeRawValue!)
+            }
+            
+        } else if sLogic.count() > 0 {
+            
+            sLogic.selectBill(up: sender.tag == 1)
+            self.selectBankTypeButton(at: sLogic.selectedBankType().rawValue)
+            self.selectedMoneyButton(true)
+        }
     }
     
     func clickedAdjustButton(_ sender: UIButton) {
         
-        sLogic.adjustPrice(add: sender.tag == 3)
+        if isSetBaseRate {
+            
+            rateCell?.adjustRate(add: sender.tag == 3)
+        } else {
+            
+            sLogic.adjustPrice(add: sender.tag == 3)
+        }
     }
     
     func touchedAddButtonLongTime(_ sender: UIButton) {
         
-        sLogic.adjustPrice(add: true)
+        if !isSetBaseRate {
+            sLogic.adjustPrice(add: true)
+        }
     }
     
     func touchedMinusButtonLongTime(_ sender: UIButton) {
         
-        sLogic.adjustPrice(add: false)
+        if !isSetBaseRate {
+            sLogic.adjustPrice(add: false)
+        }
     }
     
     func clickedBankButton(_ sender: UIButton) {
         
         let bankType = BankType(rawValue: sender.tag)
-        sLogic.updateBill(bankType: bankType!)
         
         self.selectBankTypeButton(at: sender.tag)
+        
+        if !isSetBaseRate {
+            sLogic.updateBill(bankType: bankType!)
+        }
     }
     
     func clickedMoneyDateButton(_ sender: UIButton) {
@@ -223,17 +306,22 @@ class BMTBillInfoKeyboard: BMTKeyboard, UITextFieldDelegate {
     func selectedMoneyButton(_ selected: Bool) {
         
         selectedMoney = selected
-        self.moneyDateButtons[0]?.setBackgroundImage(selected ? selectedImage : normalImage, for: .normal)
-        self.moneyDateButtons[1]?.setBackgroundImage(!selected ? selectedImage : normalImage, for: .normal)
+        self.moneyDateButtons[0]?.isSelected = selected
+        self.moneyDateButtons[1]?.isSelected = !selected
     }
     
     func selectBankTypeButton(at index: Int) {
         
+        if isSetBaseRate {
+            
+            rateCell?.selectBankType(bankType: BankType(rawValue: index)!)
+        }
+        
         for button in bankTypeButtons {
             
-            button?.setBackgroundImage(normalImage, for: .normal)
+            button?.isSelected = false
         }
-        self.bankTypeButtons[index]?.setBackgroundImage(selectedImage, for: .normal)
+        self.bankTypeButtons[index]?.isSelected = true
     }
     
     func selectRow(at indexPath:IndexPath, touchedMoney: Bool) {

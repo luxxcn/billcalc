@@ -14,6 +14,9 @@ class QuotationListController: UITableViewController {
     var billInfoKeyboard:BMTBillInfoKeyboard?
     var touchedMoney = true
     //let logic = QuotationLogic()
+    
+    var totalLable = UILabel()
+    var payTotalLable = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +47,27 @@ class QuotationListController: UITableViewController {
             ofSize: 14, weight: UIFontWeightUltraLight)
         settingButton.addTarget(self, action: #selector(clickedSettingButton), for: .touchUpInside)
         keyboardHeader.addSubview(settingButton)
+        
+        let cleanButton = UIButton(frame: CGRect(x: 85, y: 1, width: 75, height: 35))
+        cleanButton.setTitle("清空列表", for: .normal)
+        cleanButton.setTitleColor(sColorHelper.colorFrom(hex: 0x007aff), for: .normal)
+        cleanButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        cleanButton.addTarget(self, action: #selector(clickedCleanButton), for: .touchUpInside)
+        keyboardHeader.addSubview(cleanButton)
+        
+        // table footer view
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 75))
+        self.tableView.tableFooterView = footerView
+        
+        var frame = CGRect(x: 5, y: 3, width: footerView.frame.width - 10, height: 35)
+        totalLable.frame = frame
+        totalLable.text = sLogic.totalText
+        footerView.addSubview(totalLable)
+        
+        frame.origin.y = 33
+        payTotalLable.frame = frame
+        payTotalLable.text = sLogic.payTotalText
+        footerView.addSubview(payTotalLable)
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,8 +77,15 @@ class QuotationListController: UITableViewController {
     
     func clickedSettingButton() {
         
-        self.performSegue(withIdentifier: "showSettingRateViewSegue", sender: self)
+        //self.performSegue(withIdentifier: "showSettingRateViewSegue", sender: self)
+        self.performSegue(withIdentifier: "showRateSettingViewSegue", sender: self)
         self.hideTextField.resignFirstResponder()
+    }
+    
+    func clickedCleanButton() {
+        
+        sLogic.removeAll()
+        hideTextField.resignFirstResponder()
     }
     
     func addBill() {
@@ -62,9 +93,43 @@ class QuotationListController: UITableViewController {
         sLogic.addBill()
         let indexPath = IndexPath(row: sLogic.count() - 1, section: 0)
         self.tableView(tableView, didSelectRowAt: indexPath)
+        self.billInfoKeyboard?.selectedMoneyButton(true)
     }
 
     // MARK: - Table view data source
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        return 35.0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let witdh = UIScreen.main.bounds.width
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: witdh, height: 35.0))
+        let titles = ["金额", "付款行", "到期日", "价格%"]
+        
+        for i in 0..<titles.count {
+            
+            let offsetX = CGFloat(i) * witdh / 4
+            let labFrame = CGRect(x: offsetX, y: 0, width: witdh / 4, height: 35.0)
+            let lable = UILabel(frame: labFrame)
+            
+            lable.text = titles[i]
+            lable.textAlignment = .right
+            lable.backgroundColor = sColorHelper.colorFrom(hex: 0xe8ecf0)
+            if i == 3 {
+                
+                lable.frame.size.width *= 0.9
+            }
+            
+            view.addSubview(lable)
+        }
+        
+        view.backgroundColor = sColorHelper.colorFrom(hex: 0xe8ecf0)
+        
+        return view
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -104,6 +169,9 @@ class QuotationListController: UITableViewController {
             cell.contentView.backgroundColor = UIColor.white
         }
         
+        totalLable.text = sLogic.totalText
+        payTotalLable.text = sLogic.payTotalText
+        
         return cell
     }
     
@@ -120,7 +188,6 @@ class QuotationListController: UITableViewController {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -160,9 +227,9 @@ class QuotationListController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        if segue.destination is BCBillBaseRateController {
+        if segue.destination is BCBillRateSettingController {
             
-            (segue.destination as! BCBillBaseRateController).vcQuotation = self
+            (segue.destination as! BCBillRateSettingController).vcQuotation = self
         }
     }
 

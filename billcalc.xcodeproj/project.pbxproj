@@ -12,16 +12,20 @@
 		3313F50A1CAAC005008705FD /* RateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F5091CAAC005008705FD /* RateTableViewCell.swift */; };
 		3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313F50B1CAAC623008705FD /* MoneyHandle.swift */; };
 		331F85721EED61D700B5EEAD /* QuotationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331F85711EED61D700B5EEAD /* QuotationListController.swift */; };
-		3320BF721EF6B4B60092D6FF /* BCBillBaseRateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3320BF711EF6B4B60092D6FF /* BCBillBaseRateController.swift */; };
-		3320BF741EF6B6A40092D6FF /* BCBBaseRateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3320BF731EF6B6A40092D6FF /* BCBBaseRateCell.swift */; };
-		33245C931EEDEA520032288A /* BCBillPriceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33245C921EEDEA520032288A /* BCBillPriceCell.swift */; };
+		3323BEE71F092DB900FB1875 /* BCAdjustRateKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3323BEE61F092DB900FB1875 /* BCAdjustRateKeyboard.swift */; };
+		332645771F03D65F00CAC4E7 /* backspace-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 332645751F03D65F00CAC4E7 /* backspace-normal.png */; };
+		332645781F03D65F00CAC4E7 /* backspace-touched.png in Resources */ = {isa = PBXBuildFile; fileRef = 332645761F03D65F00CAC4E7 /* backspace-touched.png */; };
 		332684621EF328A700419801 /* QuotationLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332684611EF328A700419801 /* QuotationLogic.swift */; };
 		332684641EF328E700419801 /* Bill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332684631EF328E700419801 /* Bill.swift */; };
+		3326FDCC1F11D623009E7CB5 /* NumberHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3326FDCB1F11D623009E7CB5 /* NumberHelper.swift */; };
+		332A02991F08D932004A4611 /* BCBillRateSettingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A02981F08D932004A4611 /* BCBillRateSettingController.swift */; };
+		332A029B1F08E54A004A4611 /* BCBaseRateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A029A1F08E54A004A4611 /* BCBaseRateCell.swift */; };
 		334A4FC21D67FE9C007A7306 /* guide1.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FBE1D67FE9C007A7306 /* guide1.png */; };
 		334A4FC31D67FE9C007A7306 /* guide2.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FBF1D67FE9C007A7306 /* guide2.png */; };
 		334A4FC41D67FE9C007A7306 /* guide3.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FC01D67FE9C007A7306 /* guide3.png */; };
 		334A4FC51D67FE9C007A7306 /* guide4.png in Resources */ = {isa = PBXBuildFile; fileRef = 334A4FC11D67FE9C007A7306 /* guide4.png */; };
 		334A4FC71D680004007A7306 /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334A4FC61D680004007A7306 /* GuideViewController.swift */; };
+		335459D01F0D241B00C9E332 /* AdjustRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335459CF1F0D241B00C9E332 /* AdjustRate.swift */; };
 		335DA9FE1C999189009D3B41 /* logo29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA9F91C999189009D3B41 /* logo29@2x.png */; };
 		335DA9FF1C999189009D3B41 /* icon29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA9FA1C999189009D3B41 /* icon29@3x.png */; };
 		335DAA001C999189009D3B41 /* logo40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 335DA9FB1C999189009D3B41 /* logo40@2x.png */; };
@@ -33,6 +37,8 @@
 		3383C7901C9C322A0088657C /* Rate+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3383C78E1C9C322A0088657C /* Rate+CoreDataProperties.swift */; };
 		3383C7911C9C322A0088657C /* Rate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3383C78F1C9C322A0088657C /* Rate.swift */; };
 		3383C7941C9C39D40088657C /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3383C7931C9C39D40088657C /* Database.swift */; };
+		33951CF51F0BB88700D7D039 /* BCBillPriceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33951CF41F0BB88700D7D039 /* BCBillPriceCell.swift */; };
+		33951CF81F0BBCF500D7D039 /* BaseRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33951CF71F0BBCF500D7D039 /* BaseRate.swift */; };
 		33B276E41C91CD650018EB8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B276E31C91CD650018EB8C /* AppDelegate.swift */; };
 		33B276E61C91CD650018EB8C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B276E51C91CD650018EB8C /* ViewController.swift */; };
 		33B276E91C91CD650018EB8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33B276E71C91CD650018EB8C /* Main.storyboard */; };
@@ -67,16 +73,20 @@
 		3313F5091CAAC005008705FD /* RateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RateTableViewCell.swift; sourceTree = "<group>"; };
 		3313F50B1CAAC623008705FD /* MoneyHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoneyHandle.swift; sourceTree = "<group>"; };
 		331F85711EED61D700B5EEAD /* QuotationListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuotationListController.swift; sourceTree = "<group>"; };
-		3320BF711EF6B4B60092D6FF /* BCBillBaseRateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCBillBaseRateController.swift; sourceTree = "<group>"; };
-		3320BF731EF6B6A40092D6FF /* BCBBaseRateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCBBaseRateCell.swift; sourceTree = "<group>"; };
-		33245C921EEDEA520032288A /* BCBillPriceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCBillPriceCell.swift; sourceTree = "<group>"; };
+		3323BEE61F092DB900FB1875 /* BCAdjustRateKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCAdjustRateKeyboard.swift; sourceTree = "<group>"; };
+		332645751F03D65F00CAC4E7 /* backspace-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backspace-normal.png"; sourceTree = "<group>"; };
+		332645761F03D65F00CAC4E7 /* backspace-touched.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backspace-touched.png"; sourceTree = "<group>"; };
 		332684611EF328A700419801 /* QuotationLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuotationLogic.swift; sourceTree = "<group>"; };
 		332684631EF328E700419801 /* Bill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bill.swift; sourceTree = "<group>"; };
+		3326FDCB1F11D623009E7CB5 /* NumberHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberHelper.swift; sourceTree = "<group>"; };
+		332A02981F08D932004A4611 /* BCBillRateSettingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCBillRateSettingController.swift; sourceTree = "<group>"; };
+		332A029A1F08E54A004A4611 /* BCBaseRateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCBaseRateCell.swift; sourceTree = "<group>"; };
 		334A4FBE1D67FE9C007A7306 /* guide1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide1.png; path = images/guide1.png; sourceTree = "<group>"; };
 		334A4FBF1D67FE9C007A7306 /* guide2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide2.png; path = images/guide2.png; sourceTree = "<group>"; };
 		334A4FC01D67FE9C007A7306 /* guide3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide3.png; path = images/guide3.png; sourceTree = "<group>"; };
 		334A4FC11D67FE9C007A7306 /* guide4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guide4.png; path = images/guide4.png; sourceTree = "<group>"; };
 		334A4FC61D680004007A7306 /* GuideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
+		335459CF1F0D241B00C9E332 /* AdjustRate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdjustRate.swift; sourceTree = "<group>"; };
 		335DA9F91C999189009D3B41 /* logo29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo29@2x.png"; path = "billcalc/images/logo29@2x.png"; sourceTree = "<group>"; };
 		335DA9FA1C999189009D3B41 /* icon29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon29@3x.png"; path = "billcalc/images/icon29@3x.png"; sourceTree = "<group>"; };
 		335DA9FB1C999189009D3B41 /* logo40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo40@2x.png"; path = "billcalc/images/logo40@2x.png"; sourceTree = "<group>"; };
@@ -88,6 +98,9 @@
 		3383C78E1C9C322A0088657C /* Rate+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Rate+CoreDataProperties.swift"; path = "coredata/Rate+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3383C78F1C9C322A0088657C /* Rate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Rate.swift; path = coredata/Rate.swift; sourceTree = "<group>"; };
 		3383C7931C9C39D40088657C /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Database.swift; path = coredata/Database.swift; sourceTree = "<group>"; };
+		33951CF41F0BB88700D7D039 /* BCBillPriceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BCBillPriceCell.swift; sourceTree = "<group>"; };
+		33951CF61F0BBA5C00D7D039 /* billcalc 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "billcalc 2.xcdatamodel"; sourceTree = "<group>"; };
+		33951CF71F0BBCF500D7D039 /* BaseRate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRate.swift; sourceTree = "<group>"; };
 		33B276E01C91CD650018EB8C /* 贴现计算器.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "贴现计算器.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		33B276E31C91CD650018EB8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33B276E51C91CD650018EB8C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -134,12 +147,15 @@
 			isa = PBXGroup;
 			children = (
 				336B38E81EED690B00AF0DB7 /* BMTBillInfoKeyboard.swift */,
+				3323BEE61F092DB900FB1875 /* BCAdjustRateKeyboard.swift */,
 				331F85711EED61D700B5EEAD /* QuotationListController.swift */,
+				33951CF41F0BB88700D7D039 /* BCBillPriceCell.swift */,
 				332684611EF328A700419801 /* QuotationLogic.swift */,
 				332684631EF328E700419801 /* Bill.swift */,
-				33245C921EEDEA520032288A /* BCBillPriceCell.swift */,
-				3320BF711EF6B4B60092D6FF /* BCBillBaseRateController.swift */,
-				3320BF731EF6B6A40092D6FF /* BCBBaseRateCell.swift */,
+				332A029A1F08E54A004A4611 /* BCBaseRateCell.swift */,
+				332A02981F08D932004A4611 /* BCBillRateSettingController.swift */,
+				33951CF71F0BBCF500D7D039 /* BaseRate.swift */,
+				335459CF1F0D241B00C9E332 /* AdjustRate.swift */,
 			);
 			name = QuotationList;
 			sourceTree = "<group>";
@@ -158,6 +174,8 @@
 		335DA9F61C998E36009D3B41 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				332645751F03D65F00CAC4E7 /* backspace-normal.png */,
+				332645761F03D65F00CAC4E7 /* backspace-touched.png */,
 				335DA9F91C999189009D3B41 /* logo29@2x.png */,
 				335DA9FA1C999189009D3B41 /* icon29@3x.png */,
 				335DA9FB1C999189009D3B41 /* logo40@2x.png */,
@@ -180,6 +198,7 @@
 			children = (
 				3301D3DA1D4E3F0100E74562 /* DateTimeHandle.swift */,
 				336B38E61EED677600AF0DB7 /* ColorHelper.swift */,
+				3326FDCB1F11D623009E7CB5 /* NumberHelper.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -370,8 +389,10 @@
 				33B276F11C91CD650018EB8C /* LaunchScreen.storyboard in Resources */,
 				33B276EE1C91CD650018EB8C /* Assets.xcassets in Resources */,
 				335DAA021C999189009D3B41 /* logo@3x.png in Resources */,
+				332645771F03D65F00CAC4E7 /* backspace-normal.png in Resources */,
 				335DA9FE1C999189009D3B41 /* logo29@2x.png in Resources */,
 				334A4FC41D67FE9C007A7306 /* guide3.png in Resources */,
+				332645781F03D65F00CAC4E7 /* backspace-touched.png in Resources */,
 				335DAA001C999189009D3B41 /* logo40@2x.png in Resources */,
 				334A4FC31D67FE9C007A7306 /* guide2.png in Resources */,
 				334A4FC21D67FE9C007A7306 /* guide1.png in Resources */,
@@ -405,19 +426,23 @@
 			files = (
 				33B276E61C91CD650018EB8C /* ViewController.swift in Sources */,
 				336B38E71EED677600AF0DB7 /* ColorHelper.swift in Sources */,
+				335459D01F0D241B00C9E332 /* AdjustRate.swift in Sources */,
+				3326FDCC1F11D623009E7CB5 /* NumberHelper.swift in Sources */,
+				33951CF81F0BBCF500D7D039 /* BaseRate.swift in Sources */,
+				3323BEE71F092DB900FB1875 /* BCAdjustRateKeyboard.swift in Sources */,
 				3313F50A1CAAC005008705FD /* RateTableViewCell.swift in Sources */,
 				3383C7941C9C39D40088657C /* Database.swift in Sources */,
 				33FC1FA71E041320006DCE43 /* CalcLogic.swift in Sources */,
 				332684641EF328E700419801 /* Bill.swift in Sources */,
+				332A02991F08D932004A4611 /* BCBillRateSettingController.swift in Sources */,
 				3313F50C1CAAC623008705FD /* MoneyHandle.swift in Sources */,
+				332A029B1F08E54A004A4611 /* BCBaseRateCell.swift in Sources */,
 				33B276E41C91CD650018EB8C /* AppDelegate.swift in Sources */,
-				3320BF721EF6B4B60092D6FF /* BCBillBaseRateController.swift in Sources */,
-				33245C931EEDEA520032288A /* BCBillPriceCell.swift in Sources */,
 				336B38E91EED690B00AF0DB7 /* BMTBillInfoKeyboard.swift in Sources */,
 				33B276EC1C91CD650018EB8C /* billcalc.xcdatamodeld in Sources */,
-				3320BF741EF6B6A40092D6FF /* BCBBaseRateCell.swift in Sources */,
 				331F85721EED61D700B5EEAD /* QuotationListController.swift in Sources */,
 				332684621EF328A700419801 /* QuotationLogic.swift in Sources */,
+				33951CF51F0BB88700D7D039 /* BCBillPriceCell.swift in Sources */,
 				334A4FC71D680004007A7306 /* GuideViewController.swift in Sources */,
 				3301D3DB1D4E3F0100E74562 /* DateTimeHandle.swift in Sources */,
 				3383C7911C9C322A0088657C /* Rate.swift in Sources */,
@@ -699,6 +724,7 @@
 		33B276EA1C91CD650018EB8C /* billcalc.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				33951CF61F0BBA5C00D7D039 /* billcalc 2.xcdatamodel */,
 				33B276EB1C91CD650018EB8C /* billcalc.xcdatamodel */,
 			);
 			currentVersion = 33B276EB1C91CD650018EB8C /* billcalc.xcdatamodel */;

@@ -65,7 +65,7 @@ extension Date {
     
 }
 
-class DateTimeHandle: NSObject {
+class DateTimeHandle {
     
     var dateFormatter = DateFormatter()
     let holidaysCN = ["1-1":"春节", "1-2":"春节", "1-3":"春节", "1-4":"春节",

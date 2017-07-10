@@ -9,7 +9,7 @@
 import UIKit
 
 let HEADER_HEIGHT: Int = 35
-var KEYBOARD_HEIGHT: CGFloat = 311
+var KEYBOARD_HEIGHT: CGFloat = 281
 let NUM_PAD_DONE_BUTTON_TAG = 1999
 let SCREEN_SIZE = UIScreen.main.bounds.size
 
@@ -34,6 +34,8 @@ class BMTKeyboard: UIView {
         self.textField = textField
         self.searchBar = searchBar
         super.init(frame: frame)
+        
+        self.backgroundColor = sColorHelper.colorFrom(hex: 0xabb3bd)
         
         textField?.inputAccessoryView = BMTKeyboardHeader(textField: textField)
         searchBar?.inputAccessoryView = BMTKeyboardHeader(searchBar: searchBar)
@@ -109,7 +111,7 @@ class BMTKeyboardHeader: UIView {
         
         super.init(frame: frame)
         
-        self.backgroundColor = sColorHelper.colorFrom(hex: 0xd1d5db)
+        self.backgroundColor = sColorHelper.colorFrom(hex: 0xdadada)
         var setFrame = CGRect(x: Int(frame.width - 75), y: 0, width: 75,
                               height: HEADER_HEIGHT)
         let btnHide = UIButton(frame: setFrame)
@@ -206,10 +208,10 @@ class BMTKeyboardHeader: UIView {
         
         textField?.endEditing(true)
         
-        if mySearchBar != nil {
+       // if mySearchBar != nil {
             
             mySearchBar?.keyboardType = self.keyboardType
-        }
+        //}
     }
     
     required init?(coder aDecoder: NSCoder) {

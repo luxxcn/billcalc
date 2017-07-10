@@ -93,7 +93,7 @@ class Bill: NSObject {
             let endDate = sDateTimeHandle.createDate(year: year, month: month, day: day)
             let days = (endDate?.daysSinceToday())! + sDateTimeHandle.holidayDays(from: endDate!)
             
-            return days
+            return days + 3
         }
     }
     
@@ -106,42 +106,35 @@ class Bill: NSObject {
                 return priceAdd
             }
             
-            let days = self.daysSinceToday + 3
+            let days = self.daysSinceToday
             
-            var section = 0
             let myMoney = money == "" ? 0.0 : Double(money)!
-            if myMoney >= 200 {
-                section = 0
-            } else if myMoney >= 100 {
-                
-                section = 1
-            } else if myMoney >= 50 {
-                
-                section = 2
-            } else {
-                
-                section = 3
-            }
-            let key = String(format: "%@%d_%d", self.bankType.key, section, self.bankType.rawValue)
             
             var rate = 0.0
-            let baseRate = UserDefaults.standard.value(forKey: key)
+            let baseRate = sLogic.baseRate?[self.bankType.rawValue]
             if baseRate != nil {
                 
-                let strRate = baseRate as! String
-                rate = strRate == "" ? 0.0 : Double(strRate)!
+                if baseRate != "" && baseRate != " " {
+                    rate = Double(baseRate!)!
+                }
             }
             
-            var add = 0.0
-            let per10Add = UserDefaults.standard.value(forKey: per10Key)
-            if per10Add != nil {
+            // adjust rate
+            var charge = 0.0
+            let adjustRate = sLogic.getRightAdjustRate(money: myMoney)
+            if adjustRate != nil {
                 
-                let strPer10Add = per10Add as! String
-                add = strPer10Add == "" ? 0.0 : Double(strPer10Add)!
+                rate += Double((adjustRate?.rate)!)
+                charge += Double((adjustRate?.charge)!)
             }
-            add /= 1000.0
+            charge /= 1000.0
             
-            return rate * Double(days) / 300 + add + priceAdd
+            rate = rate * Double(days) / 300 + charge
+            
+            // 调整为2位小数
+            rate = Double(String(format: "%.2f", rate))!
+            
+            return rate + priceAdd
         }
     }
 }

@@ -7,15 +7,241 @@
 //
 
 import UIKit
+import CoreData
 
 let sLogic = QuotationLogic()
 
-class QuotationLogic: NSObject {
+class QuotationLogic {
+    
+    var _baseRateController:NSFetchedResultsController<NSFetchRequestResult>?
+    var baseRateController:NSFetchedResultsController<NSFetchRequestResult>? {
+        get {
+            if _baseRateController != nil {
+                return _baseRateController
+            }
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let managedObjectContext = appDelegate.managedObjectContext
+            let entity = NSEntityDescription.entity(forEntityName: "BaseRate", in: managedObjectContext)
+            let request = NSFetchRequest<NSFetchRequestResult>()
+            
+            request.entity = entity
+            request.fetchBatchSize = 20
+            
+            let sortDescriptor0 = NSSortDescriptor(key: "date", ascending: true)
+            //let sortDescriptor1 = NSSortDescriptor(key: "type", ascending: true)
+            request.sortDescriptors = [sortDescriptor0]
+            
+            _baseRateController =
+                NSFetchedResultsController(fetchRequest: request,
+                                           managedObjectContext: managedObjectContext,
+                                           sectionNameKeyPath: nil,
+                                           cacheName: nil)
+            
+            //_baseRateController?.delegate = self
+            
+            do {
+                try _baseRateController?.performFetch()
+            } catch {
+                
+                print(error.localizedDescription)
+            }
+            
+            return _baseRateController
+        }
+    }
+    var baseRate:BaseRate? {
+        
+        get {
+            
+            if (baseRateController?.fetchedObjects?.count)! > 0 {
+                
+                let indexPath = IndexPath(row: 0, section: 0)
+                return baseRateController?.object(at: indexPath) as? BaseRate
+            }
+            let context = baseRateController?.managedObjectContext
+            let entity = baseRateController?.fetchRequest.entity
+            let baseRate = NSEntityDescription.insertNewObject(forEntityName: (entity?.name)!, into: context!) as? BaseRate
+            baseRate?.date = 1
+            baseRate?.rateData = "0,0,0,0,0,0"
+            return baseRate
+        }
+    }
+    
+    var _adjustRateController:NSFetchedResultsController<NSFetchRequestResult>?
+    var adjustRateController:NSFetchedResultsController<NSFetchRequestResult>? {
+        get {
+            if _adjustRateController != nil {
+                return _adjustRateController
+            }
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let managedObjectContext = appDelegate.managedObjectContext
+            let entity = NSEntityDescription.entity(forEntityName: "AdjustRate", in: managedObjectContext)
+            let request = NSFetchRequest<NSFetchRequestResult>()
+            
+            request.entity = entity
+            request.fetchBatchSize = 20
+            
+            let sortDescriptor0 = NSSortDescriptor(key: "money", ascending: false)
+            request.sortDescriptors = [sortDescriptor0]
+            
+            _adjustRateController =
+                NSFetchedResultsController(fetchRequest: request,
+                                           managedObjectContext: managedObjectContext,
+                                           sectionNameKeyPath: nil,
+                                           cacheName: nil)
+            
+            do {
+                try _adjustRateController?.performFetch()
+            } catch {
+                
+                print(error.localizedDescription)
+            }
+            
+            return _adjustRateController
+        }
+    }
     
     var bills = [Bill]()
     var tableView:UITableView?
     
     var currSelected:IndexPath?
+    
+    var totalMoney:Double {// 单位  元
+        
+        get {
+            
+            var sum = 0.0
+            for bill in bills {
+                
+                sum += Double(bill.money)!
+            }
+            
+            return sum * 10000
+        }
+    }
+    
+    var totalPay:Double {
+        
+        get {
+            
+            var sum = 0.0
+            for bill in bills {
+                
+                let pay = Double(bill.money)! * bill.price * 100
+                sum += pay
+            }
+            
+            return sum
+        }
+    }
+    let formatter = NumberFormatter()
+    
+    var totalText:String {
+        
+        get {
+            
+            if bills.count == 0 {
+                
+                return ""
+            }
+            
+            //print(sNumberHelper.formatAmountCN(NSNumber(value: totalMoney))!)
+            
+            return String(format: "共%d张，%@元", bills.count,
+                          sNumberHelper.formatNumber(NSNumber(value: totalMoney))!)
+        }
+    }
+    
+    var payTotalText:String {
+        
+        get {
+            
+            if bills.count == 0 {
+                
+                return ""
+            }
+            
+            let pay = totalPay
+            return String(format: "扣息%@元，余%@元",
+                          formatter.string(from: NSNumber(value: pay))!,
+                          formatter.string(from: NSNumber(value: totalMoney - pay))!)
+        }
+    }
+    
+    var clickedAdjustRateTag = AdjustRateType.adjustBaseMoney
+    
+    init() {
+        formatter.numberStyle = .decimal
+    }
+    
+    // MARK: adjust rate handler
+    func adjustRateCount() -> Int {
+        
+        return (adjustRateController?.fetchedObjects?.count)!
+    }
+    
+    func addAdjustRate() {
+        
+        let context = adjustRateController?.managedObjectContext
+        let entity = adjustRateController?.fetchRequest.entity
+        let adjustRate = NSEntityDescription.insertNewObject(
+            forEntityName: (entity?.name)!, into: context!) as? AdjustRate
+        adjustRate?.money = 0.0
+        adjustRate?.charge = 0.0
+        adjustRate?.rate = 0.0
+        do {
+            
+            try adjustRate?.managedObjectContext?.save()
+        } catch {
+            
+            print(error.localizedDescription)
+        }
+    }
+    
+    func deleteAdjustRate(at row: Int) {
+        
+        let indexPath = IndexPath(row: row, section: 0)
+        let adjustRate = adjustRateController?.object(at: indexPath)
+        let context = adjustRateController?.managedObjectContext
+        context?.delete(adjustRate as! NSManagedObject)
+        do {
+            
+            try context?.save()
+        } catch {
+            
+            print(error.localizedDescription)
+        }
+    }
+    
+    func getAdjustRate(at row: Int) -> AdjustRate {
+        
+        let indexPath = IndexPath(row: row, section: 0)
+        return adjustRateController?.object(at: indexPath) as! AdjustRate
+    }
+    
+    func allAdjustRate() -> [AdjustRate]? {
+        
+        return adjustRateController?.fetchedObjects as? [AdjustRate]
+    }
+    
+    func getRightAdjustRate(money: Double) -> AdjustRate? {
+        
+        var rate:AdjustRate?
+        for adjustRate in allAdjustRate()! {
+            
+            if money >= Double(adjustRate.money!) {
+                
+                rate = adjustRate
+                break
+            }
+        }
+        
+        return rate
+    }
+    
+    // MARK: bill handler
     
     func count() -> Int {
         
@@ -26,6 +252,12 @@ class QuotationLogic: NSObject {
         
         let bill = Bill()
         bills.append(bill)
+        tableView?.reloadData()
+    }
+    
+    func removeAll() {
+        
+        bills.removeAll()
         tableView?.reloadData()
     }
     
@@ -67,7 +299,7 @@ class QuotationLogic: NSObject {
         
         let bill = selectedBill()
         
-        if Double(bill.money) == 0.0 {
+        if bill.money == "0.00" {
             
             if addMoney == "." {
                 
@@ -80,8 +312,14 @@ class QuotationLogic: NSObject {
             
             let range = bill.money.range(of: ".")
             if addMoney != "." || range == nil {
-                
-                bill.money.append(addMoney)
+            
+                if bill.money == "0" && addMoney != "." {
+                    
+                    bill.money = addMoney
+                } else {
+                    
+                    bill.money.append(addMoney)
+                }
             }
         }
         
@@ -99,8 +337,13 @@ class QuotationLogic: NSObject {
         let bill = selectedBill()
         if bill.money.characters.count > 0 {
             
-            let index = bill.money.index(bill.money.endIndex, offsetBy: -1)
-            bill.money = bill.money.substring(to: index)
+            
+            repeat {
+                
+                let index = bill.money.index(bill.money.endIndex, offsetBy: -1)
+                bill.money = bill.money.substring(to: index)
+            } while bill.money.range(of: ".")?.upperBound == bill.money.endIndex
+            
             if bill.money == "" {
                 bill.money = "0"
             }
@@ -232,10 +475,12 @@ class QuotationLogic: NSObject {
                 
                 self.currSelected?.row = row
                 addBill()
-                if self.currSelected != nil {
-                    
-                    self.tableView?.scrollToRow(at: self.currSelected!, at: .bottom, animated: true)
-                }
+            }
+            
+            if self.currSelected != nil {
+                
+                let position:UITableViewScrollPosition = up ? .top : .bottom
+                self.tableView?.scrollToRow(at: self.currSelected!, at: position, animated: true)
             }
         }
     }
